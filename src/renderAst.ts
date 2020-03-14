@@ -8,7 +8,9 @@ export default async function renderAst(ast: Node): Promise<string> {
       const isArrayNode =
         node && typeof node === 'object' && isNumber(node.length);
       const isEmpty =
-        !node || (isArrayNode && !node.length) || !Object.keys(node).length;
+        (!isNumber(node) && !node) ||
+        (isArrayNode && !node.length) ||
+        (typeof node === 'object' && !Object.keys(node).length);
       let childType = typeof node as string;
       if (node === null) {
         childType = 'null';
