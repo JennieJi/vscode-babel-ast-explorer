@@ -1,0 +1,175 @@
+<html>
+  <header>
+    <title>{{title}}</title>
+    <style>
+      :root {
+        --color-ast-default: #222222;
+        --color-ast-primary: #ac6c3b;
+        --color-ast-secondary: #0c53a3;
+        --color-ast-string: #77282d;
+        --color-ast-number: #279494;
+
+        --gap: 0.5em;
+      }
+
+      #ast {
+        color: var(--color-ast-default);
+      }
+      .type {
+        color: var(--color-ast-primary);
+      }
+      .type::after {
+        content: ' ';
+      }
+      .key {
+        color: var(--color-ast-secondary);
+      }
+      .key::after {
+        content: ': ';
+      }
+      .child-type-string .child {
+        color: var(--color-ast-string);
+      }
+      .child-type-string > .child::before,
+      .child-type-string > .child::after {
+        content: '"';
+      }
+      .child-type-number .child {
+        color: var(--color-ast-number);
+      }
+
+      dl,
+      dd,
+      dt {
+        margin: 0;
+        padding: 0;
+      }
+      dl dl {
+        margin: 0 0 0 1em;
+      }
+      .child dt {
+        cursor: pointer;
+      }
+      .child-type-object > dt::before,
+      .child-type-array > dt::before {
+        display: inline-block;
+        color: var(--color-ast-primary);
+        content: '-';
+        padding: 0 0.1em;
+        border: 1px solid var(--color-ast-primary);
+        line-height: 0.6em;
+        margin: 0 var(--gap) 0 0;
+      }
+      dl.type- > dt::before {
+        content: none;
+      }
+
+      dl.collapse > * {
+        display: inline-block;
+      }
+      dl.collapse > dt::before {
+        content: '+';
+      }
+      dl.collapse > dd {
+        margin-left: var(--gap);
+        margin-right: var(--gap);
+      }
+      dl.collapse > dd::after {
+        color: var(--color-ast-primary);
+        content: '...';
+      }
+      dl.collapse > dd > dl {
+        display: none;
+      }
+
+      dl dl::after {
+        content: ',';
+      }
+      dl dl:last-child::after {
+        content: none;
+      }
+
+      dl.child-type-object > dt::after {
+        content: ' {';
+      }
+      dl.child-type-object::after {
+        content: '},';
+      }
+      dl.child-type-object:last-child::after {
+        content: '}';
+      }
+
+      dl.child-type-array > dd > dl > dt .key {
+        display: none;
+      }
+      dl.child-type-array > dt::after {
+        content: ' [';
+      }
+      dl.child-type-array::after {
+        content: '],';
+      }
+      dl.child-type-array:last-child::after {
+        content: ']';
+      }
+
+      .child dl:not(.child-type-array):not(.child-type-object) > * {
+        display: inline-block;
+      }
+
+      .no-loc .key-loc,
+      .no-loc .key-start,
+      .no-loc .key-end {
+        display: none;
+      }
+      .no-type .key-type {
+        display: none;
+      }
+    </style>
+  </header>
+  <body class="no-loc no-type">
+    <div>
+      <dl id="ast">
+        <dt>{</dt>
+        <dd class="child">{{ast}}</dd>
+        <dd>}</dd>
+      </dl>
+      <aside>
+        <div id="versions">
+          <label>
+            Version:
+            <select value="{{version}}">
+              {{versions}}
+            </select>
+          </label>
+        </div>
+        <h2>Options</h2>
+        <ul id="options">
+          {{Options}}
+        </ul>
+        <h2>Plugins</h2>
+        <ul id="plugins">
+          {{plugins}}
+        </ul>
+      </aside>
+    </div>
+
+    <script>
+      window.onload = function() {
+        var COLLAPSE_CLASS = 'collapse';
+        var els = document.querySelectorAll(
+          '.child-type-object>dt,.child-type-array>dt'
+        );
+        for (let el of els) {
+          el.addEventListener('click', function(e) {
+            var classList = e.target.parentElement.parentElement.classList;
+            if (classList.contains(COLLAPSE_CLASS)) {
+              classList.remove(COLLAPSE_CLASS);
+            } else {
+              classList.add(COLLAPSE_CLASS);
+            }
+          });
+        }
+      };
+    </script>
+  </body>
+</html>

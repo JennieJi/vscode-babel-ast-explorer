@@ -1,0 +1,850 @@
+<html>
+  <header>
+    <title>Babel AST Explorer</title>
+    <style>
+      :root {
+        --color-ast-default: #222222;
+        --color-ast-primary: #ac6c3b;
+        --color-ast-secondary: #0c53a3;
+        --color-ast-string: #77282d;
+        --color-ast-number: #279494;
+
+        --gap: 0.5em;
+      }
+
+      #ast {
+        color: var(--color-ast-default);
+      }
+      .type {
+        color: var(--color-ast-primary);
+      }
+      .type::after {
+        content: ' ';
+      }
+      .key {
+        color: var(--color-ast-secondary);
+      }
+      .key::after {
+        content: ': ';
+      }
+      .child-type-string .child {
+        color: var(--color-ast-string);
+      }
+      .child-type-string > .child::before,
+      .child-type-string > .child::after {
+        content: '"';
+      }
+      .child-type-number .child {
+        color: var(--color-ast-number);
+      }
+
+      dl,
+      dd,
+      dt {
+        margin: 0;
+        padding: 0;
+      }
+      dl dl {
+        margin: 0 0 0 1em;
+      }
+      .child dt {
+        cursor: pointer;
+      }
+      .child-type-object > dt::before,
+      .child-type-array > dt::before {
+        display: inline-block;
+        color: var(--color-ast-primary);
+        content: '-';
+        padding: 0 0.1em;
+        border: 1px solid var(--color-ast-primary);
+        line-height: 0.6em;
+        margin: 0 var(--gap) 0 0;
+      }
+      dl.type- > dt::before {
+        content: none;
+      }
+
+      dl.collapse > * {
+        display: inline-block;
+      }
+      dl.collapse > dt::before {
+        content: '+';
+      }
+      dl.collapse > dd {
+        margin-left: var(--gap);
+        margin-right: var(--gap);
+      }
+      dl.collapse > dd::after {
+        color: var(--color-ast-primary);
+        content: '...';
+      }
+      dl.collapse > dd > dl {
+        display: none;
+      }
+
+      dl dl::after {
+        content: ',';
+      }
+      dl dl:last-child::after {
+        content: none;
+      }
+
+      dl.child-type-object > dt::after {
+        content: ' {';
+      }
+      dl.child-type-object::after {
+        content: '},';
+      }
+      dl.child-type-object:last-child::after {
+        content: '}';
+      }
+
+      dl.child-type-array > dd > dl > dt .key {
+        display: none;
+      }
+      dl.child-type-array > dt::after {
+        content: ' [';
+      }
+      dl.child-type-array::after {
+        content: '],';
+      }
+      dl.child-type-array:last-child::after {
+        content: ']';
+      }
+
+      .child dl:not(.child-type-array):not(.child-type-object) > * {
+        display: inline-block;
+      }
+
+      .no-loc .key-loc,
+      .no-loc .key-start,
+      .no-loc .key-end {
+        display: none;
+      }
+      .no-type .key-type {
+        display: none;
+      }
+    </style>
+  </header>
+  <body class="no-loc no-type">
+    <div>
+      <dl id="ast">
+        <dt>{</dt>
+        <dd class="child"><dl
+  class="key-type type- child-type-string line-"
+  data-col-start=""
+  data-col-end=""
+>
+  <dt><span class="key">type</span><span class="type"></span></dt>
+  <dd class="child">File</dd>
+</dl>
+
+<dl
+  class="key-start type- child-type-number line-"
+  data-col-start=""
+  data-col-end=""
+>
+  <dt><span class="key">start</span><span class="type"></span></dt>
+  <dd class="child">0</dd>
+</dl>
+
+<dl
+  class="key-end type- child-type-number line-"
+  data-col-start=""
+  data-col-end=""
+>
+  <dt><span class="key">end</span><span class="type"></span></dt>
+  <dd class="child">24</dd>
+</dl>
+
+<dl
+  class="key-loc type- child-type-object line-"
+  data-col-start=""
+  data-col-end=""
+>
+  <dt><span class="key">loc</span><span class="type"></span></dt>
+  <dd class="child"><dl
+  class="key-start type- child-type-object line-"
+  data-col-start=""
+  data-col-end=""
+>
+  <dt><span class="key">start</span><span class="type"></span></dt>
+  <dd class="child"><dl
+  class="key-line type- child-type-number line-"
+  data-col-start=""
+  data-col-end=""
+>
+  <dt><span class="key">line</span><span class="type"></span></dt>
+  <dd class="child">1</dd>
+</dl>
+
+<dl
+  class="key-column type- child-type-number line-"
+  data-col-start=""
+  data-col-end=""
+>
+  <dt><span class="key">column</span><span class="type"></span></dt>
+  <dd class="child">0</dd>
+</dl>
+</dd>
+</dl>
+
+<dl
+  class="key-end type- child-type-object line-"
+  data-col-start=""
+  data-col-end=""
+>
+  <dt><span class="key">end</span><span class="type"></span></dt>
+  <dd class="child"><dl
+  class="key-line type- child-type-number line-"
+  data-col-start=""
+  data-col-end=""
+>
+  <dt><span class="key">line</span><span class="type"></span></dt>
+  <dd class="child">1</dd>
+</dl>
+
+<dl
+  class="key-column type- child-type-number line-"
+  data-col-start=""
+  data-col-end=""
+>
+  <dt><span class="key">column</span><span class="type"></span></dt>
+  <dd class="child">24</dd>
+</dl>
+</dd>
+</dl>
+</dd>
+</dl>
+
+<dl
+  class="key-errors type- child-type-array line-"
+  data-col-start=""
+  data-col-end=""
+>
+  <dt><span class="key">errors</span><span class="type"></span></dt>
+  <dd class="child"></dd>
+</dl>
+
+<dl
+  class="key-program type-Program child-type-object line-1"
+  data-col-start="0"
+  data-col-end="24"
+>
+  <dt><span class="key">program</span><span class="type">Program</span></dt>
+  <dd class="child"><dl
+  class="key-type type- child-type-string line-"
+  data-col-start=""
+  data-col-end=""
+>
+  <dt><span class="key">type</span><span class="type"></span></dt>
+  <dd class="child">Program</dd>
+</dl>
+
+<dl
+  class="key-start type- child-type-number line-"
+  data-col-start=""
+  data-col-end=""
+>
+  <dt><span class="key">start</span><span class="type"></span></dt>
+  <dd class="child">0</dd>
+</dl>
+
+<dl
+  class="key-end type- child-type-number line-"
+  data-col-start=""
+  data-col-end=""
+>
+  <dt><span class="key">end</span><span class="type"></span></dt>
+  <dd class="child">24</dd>
+</dl>
+
+<dl
+  class="key-loc type- child-type-object line-"
+  data-col-start=""
+  data-col-end=""
+>
+  <dt><span class="key">loc</span><span class="type"></span></dt>
+  <dd class="child"><dl
+  class="key-start type- child-type-object line-"
+  data-col-start=""
+  data-col-end=""
+>
+  <dt><span class="key">start</span><span class="type"></span></dt>
+  <dd class="child"><dl
+  class="key-line type- child-type-number line-"
+  data-col-start=""
+  data-col-end=""
+>
+  <dt><span class="key">line</span><span class="type"></span></dt>
+  <dd class="child">1</dd>
+</dl>
+
+<dl
+  class="key-column type- child-type-number line-"
+  data-col-start=""
+  data-col-end=""
+>
+  <dt><span class="key">column</span><span class="type"></span></dt>
+  <dd class="child">0</dd>
+</dl>
+</dd>
+</dl>
+
+<dl
+  class="key-end type- child-type-object line-"
+  data-col-start=""
+  data-col-end=""
+>
+  <dt><span class="key">end</span><span class="type"></span></dt>
+  <dd class="child"><dl
+  class="key-line type- child-type-number line-"
+  data-col-start=""
+  data-col-end=""
+>
+  <dt><span class="key">line</span><span class="type"></span></dt>
+  <dd class="child">1</dd>
+</dl>
+
+<dl
+  class="key-column type- child-type-number line-"
+  data-col-start=""
+  data-col-end=""
+>
+  <dt><span class="key">column</span><span class="type"></span></dt>
+  <dd class="child">24</dd>
+</dl>
+</dd>
+</dl>
+</dd>
+</dl>
+
+<dl
+  class="key-sourceType type- child-type-string line-"
+  data-col-start=""
+  data-col-end=""
+>
+  <dt><span class="key">sourceType</span><span class="type"></span></dt>
+  <dd class="child">module</dd>
+</dl>
+
+<dl
+  class="key-interpreter type- child-type-null line-"
+  data-col-start=""
+  data-col-end=""
+>
+  <dt><span class="key">interpreter</span><span class="type"></span></dt>
+  <dd class="child">null</dd>
+</dl>
+
+<dl
+  class="key-body type- child-type-array line-"
+  data-col-start=""
+  data-col-end=""
+>
+  <dt><span class="key">body</span><span class="type"></span></dt>
+  <dd class="child"><dl
+  class="key-0 type-ImportDeclaration child-type-object line-1"
+  data-col-start="0"
+  data-col-end="24"
+>
+  <dt><span class="key">0</span><span class="type">ImportDeclaration</span></dt>
+  <dd class="child"><dl
+  class="key-type type- child-type-string line-"
+  data-col-start=""
+  data-col-end=""
+>
+  <dt><span class="key">type</span><span class="type"></span></dt>
+  <dd class="child">ImportDeclaration</dd>
+</dl>
+
+<dl
+  class="key-start type- child-type-number line-"
+  data-col-start=""
+  data-col-end=""
+>
+  <dt><span class="key">start</span><span class="type"></span></dt>
+  <dd class="child">0</dd>
+</dl>
+
+<dl
+  class="key-end type- child-type-number line-"
+  data-col-start=""
+  data-col-end=""
+>
+  <dt><span class="key">end</span><span class="type"></span></dt>
+  <dd class="child">24</dd>
+</dl>
+
+<dl
+  class="key-loc type- child-type-object line-"
+  data-col-start=""
+  data-col-end=""
+>
+  <dt><span class="key">loc</span><span class="type"></span></dt>
+  <dd class="child"><dl
+  class="key-start type- child-type-object line-"
+  data-col-start=""
+  data-col-end=""
+>
+  <dt><span class="key">start</span><span class="type"></span></dt>
+  <dd class="child"><dl
+  class="key-line type- child-type-number line-"
+  data-col-start=""
+  data-col-end=""
+>
+  <dt><span class="key">line</span><span class="type"></span></dt>
+  <dd class="child">1</dd>
+</dl>
+
+<dl
+  class="key-column type- child-type-number line-"
+  data-col-start=""
+  data-col-end=""
+>
+  <dt><span class="key">column</span><span class="type"></span></dt>
+  <dd class="child">0</dd>
+</dl>
+</dd>
+</dl>
+
+<dl
+  class="key-end type- child-type-object line-"
+  data-col-start=""
+  data-col-end=""
+>
+  <dt><span class="key">end</span><span class="type"></span></dt>
+  <dd class="child"><dl
+  class="key-line type- child-type-number line-"
+  data-col-start=""
+  data-col-end=""
+>
+  <dt><span class="key">line</span><span class="type"></span></dt>
+  <dd class="child">1</dd>
+</dl>
+
+<dl
+  class="key-column type- child-type-number line-"
+  data-col-start=""
+  data-col-end=""
+>
+  <dt><span class="key">column</span><span class="type"></span></dt>
+  <dd class="child">24</dd>
+</dl>
+</dd>
+</dl>
+</dd>
+</dl>
+
+<dl
+  class="key-specifiers type- child-type-array line-"
+  data-col-start=""
+  data-col-end=""
+>
+  <dt><span class="key">specifiers</span><span class="type"></span></dt>
+  <dd class="child"><dl
+  class="key-0 type-ImportDefaultSpecifier child-type-object line-1"
+  data-col-start="7"
+  data-col-end="8"
+>
+  <dt><span class="key">0</span><span class="type">ImportDefaultSpecifier</span></dt>
+  <dd class="child"><dl
+  class="key-type type- child-type-string line-"
+  data-col-start=""
+  data-col-end=""
+>
+  <dt><span class="key">type</span><span class="type"></span></dt>
+  <dd class="child">ImportDefaultSpecifier</dd>
+</dl>
+
+<dl
+  class="key-start type- child-type-number line-"
+  data-col-start=""
+  data-col-end=""
+>
+  <dt><span class="key">start</span><span class="type"></span></dt>
+  <dd class="child">7</dd>
+</dl>
+
+<dl
+  class="key-end type- child-type-number line-"
+  data-col-start=""
+  data-col-end=""
+>
+  <dt><span class="key">end</span><span class="type"></span></dt>
+  <dd class="child">8</dd>
+</dl>
+
+<dl
+  class="key-loc type- child-type-object line-"
+  data-col-start=""
+  data-col-end=""
+>
+  <dt><span class="key">loc</span><span class="type"></span></dt>
+  <dd class="child"><dl
+  class="key-start type- child-type-object line-"
+  data-col-start=""
+  data-col-end=""
+>
+  <dt><span class="key">start</span><span class="type"></span></dt>
+  <dd class="child"><dl
+  class="key-line type- child-type-number line-"
+  data-col-start=""
+  data-col-end=""
+>
+  <dt><span class="key">line</span><span class="type"></span></dt>
+  <dd class="child">1</dd>
+</dl>
+
+<dl
+  class="key-column type- child-type-number line-"
+  data-col-start=""
+  data-col-end=""
+>
+  <dt><span class="key">column</span><span class="type"></span></dt>
+  <dd class="child">7</dd>
+</dl>
+</dd>
+</dl>
+
+<dl
+  class="key-end type- child-type-object line-"
+  data-col-start=""
+  data-col-end=""
+>
+  <dt><span class="key">end</span><span class="type"></span></dt>
+  <dd class="child"><dl
+  class="key-line type- child-type-number line-"
+  data-col-start=""
+  data-col-end=""
+>
+  <dt><span class="key">line</span><span class="type"></span></dt>
+  <dd class="child">1</dd>
+</dl>
+
+<dl
+  class="key-column type- child-type-number line-"
+  data-col-start=""
+  data-col-end=""
+>
+  <dt><span class="key">column</span><span class="type"></span></dt>
+  <dd class="child">8</dd>
+</dl>
+</dd>
+</dl>
+</dd>
+</dl>
+
+<dl
+  class="key-local type-Identifier child-type-object line-1"
+  data-col-start="7"
+  data-col-end="8"
+>
+  <dt><span class="key">local</span><span class="type">Identifier</span></dt>
+  <dd class="child"><dl
+  class="key-type type- child-type-string line-"
+  data-col-start=""
+  data-col-end=""
+>
+  <dt><span class="key">type</span><span class="type"></span></dt>
+  <dd class="child">Identifier</dd>
+</dl>
+
+<dl
+  class="key-start type- child-type-number line-"
+  data-col-start=""
+  data-col-end=""
+>
+  <dt><span class="key">start</span><span class="type"></span></dt>
+  <dd class="child">7</dd>
+</dl>
+
+<dl
+  class="key-end type- child-type-number line-"
+  data-col-start=""
+  data-col-end=""
+>
+  <dt><span class="key">end</span><span class="type"></span></dt>
+  <dd class="child">8</dd>
+</dl>
+
+<dl
+  class="key-loc type- child-type-object line-"
+  data-col-start=""
+  data-col-end=""
+>
+  <dt><span class="key">loc</span><span class="type"></span></dt>
+  <dd class="child"><dl
+  class="key-start type- child-type-object line-"
+  data-col-start=""
+  data-col-end=""
+>
+  <dt><span class="key">start</span><span class="type"></span></dt>
+  <dd class="child"><dl
+  class="key-line type- child-type-number line-"
+  data-col-start=""
+  data-col-end=""
+>
+  <dt><span class="key">line</span><span class="type"></span></dt>
+  <dd class="child">1</dd>
+</dl>
+
+<dl
+  class="key-column type- child-type-number line-"
+  data-col-start=""
+  data-col-end=""
+>
+  <dt><span class="key">column</span><span class="type"></span></dt>
+  <dd class="child">7</dd>
+</dl>
+</dd>
+</dl>
+
+<dl
+  class="key-end type- child-type-object line-"
+  data-col-start=""
+  data-col-end=""
+>
+  <dt><span class="key">end</span><span class="type"></span></dt>
+  <dd class="child"><dl
+  class="key-line type- child-type-number line-"
+  data-col-start=""
+  data-col-end=""
+>
+  <dt><span class="key">line</span><span class="type"></span></dt>
+  <dd class="child">1</dd>
+</dl>
+
+<dl
+  class="key-column type- child-type-number line-"
+  data-col-start=""
+  data-col-end=""
+>
+  <dt><span class="key">column</span><span class="type"></span></dt>
+  <dd class="child">8</dd>
+</dl>
+</dd>
+</dl>
+
+<dl
+  class="key-identifierName type- child-type-string line-"
+  data-col-start=""
+  data-col-end=""
+>
+  <dt><span class="key">identifierName</span><span class="type"></span></dt>
+  <dd class="child">a</dd>
+</dl>
+</dd>
+</dl>
+
+<dl
+  class="key-name type- child-type-string line-"
+  data-col-start=""
+  data-col-end=""
+>
+  <dt><span class="key">name</span><span class="type"></span></dt>
+  <dd class="child">a</dd>
+</dl>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd>
+</dl>
+
+<dl
+  class="key-source type-StringLiteral child-type-object line-1"
+  data-col-start="14"
+  data-col-end="24"
+>
+  <dt><span class="key">source</span><span class="type">StringLiteral</span></dt>
+  <dd class="child"><dl
+  class="key-type type- child-type-string line-"
+  data-col-start=""
+  data-col-end=""
+>
+  <dt><span class="key">type</span><span class="type"></span></dt>
+  <dd class="child">StringLiteral</dd>
+</dl>
+
+<dl
+  class="key-start type- child-type-number line-"
+  data-col-start=""
+  data-col-end=""
+>
+  <dt><span class="key">start</span><span class="type"></span></dt>
+  <dd class="child">14</dd>
+</dl>
+
+<dl
+  class="key-end type- child-type-number line-"
+  data-col-start=""
+  data-col-end=""
+>
+  <dt><span class="key">end</span><span class="type"></span></dt>
+  <dd class="child">24</dd>
+</dl>
+
+<dl
+  class="key-loc type- child-type-object line-"
+  data-col-start=""
+  data-col-end=""
+>
+  <dt><span class="key">loc</span><span class="type"></span></dt>
+  <dd class="child"><dl
+  class="key-start type- child-type-object line-"
+  data-col-start=""
+  data-col-end=""
+>
+  <dt><span class="key">start</span><span class="type"></span></dt>
+  <dd class="child"><dl
+  class="key-line type- child-type-number line-"
+  data-col-start=""
+  data-col-end=""
+>
+  <dt><span class="key">line</span><span class="type"></span></dt>
+  <dd class="child">1</dd>
+</dl>
+
+<dl
+  class="key-column type- child-type-number line-"
+  data-col-start=""
+  data-col-end=""
+>
+  <dt><span class="key">column</span><span class="type"></span></dt>
+  <dd class="child">14</dd>
+</dl>
+</dd>
+</dl>
+
+<dl
+  class="key-end type- child-type-object line-"
+  data-col-start=""
+  data-col-end=""
+>
+  <dt><span class="key">end</span><span class="type"></span></dt>
+  <dd class="child"><dl
+  class="key-line type- child-type-number line-"
+  data-col-start=""
+  data-col-end=""
+>
+  <dt><span class="key">line</span><span class="type"></span></dt>
+  <dd class="child">1</dd>
+</dl>
+
+<dl
+  class="key-column type- child-type-number line-"
+  data-col-start=""
+  data-col-end=""
+>
+  <dt><span class="key">column</span><span class="type"></span></dt>
+  <dd class="child">24</dd>
+</dl>
+</dd>
+</dl>
+</dd>
+</dl>
+
+<dl
+  class="key-extra type- child-type-object line-"
+  data-col-start=""
+  data-col-end=""
+>
+  <dt><span class="key">extra</span><span class="type"></span></dt>
+  <dd class="child"><dl
+  class="key-rawValue type- child-type-string line-"
+  data-col-start=""
+  data-col-end=""
+>
+  <dt><span class="key">rawValue</span><span class="type"></span></dt>
+  <dd class="child">module_a</dd>
+</dl>
+
+<dl
+  class="key-raw type- child-type-string line-"
+  data-col-start=""
+  data-col-end=""
+>
+  <dt><span class="key">raw</span><span class="type"></span></dt>
+  <dd class="child">"module_a"</dd>
+</dl>
+</dd>
+</dl>
+
+<dl
+  class="key-value type- child-type-string line-"
+  data-col-start=""
+  data-col-end=""
+>
+  <dt><span class="key">value</span><span class="type"></span></dt>
+  <dd class="child">module_a</dd>
+</dl>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd>
+</dl>
+
+<dl
+  class="key-directives type- child-type-array line-"
+  data-col-start=""
+  data-col-end=""
+>
+  <dt><span class="key">directives</span><span class="type"></span></dt>
+  <dd class="child"></dd>
+</dl>
+</dd>
+</dl>
+
+<dl
+  class="key-comments type- child-type-array line-"
+  data-col-start=""
+  data-col-end=""
+>
+  <dt><span class="key">comments</span><span class="type"></span></dt>
+  <dd class="child"></dd>
+</dl>
+</dd>
+        <dd>}</dd>
+      </dl>
+      <aside>
+        <div id="versions">
+          <label>
+            Version:
+            <select value="undefined">
+              
+            </select>
+          </label>
+        </div>
+        <h2>Options</h2>
+        <ul id="options">
+          Options
+        </ul>
+        <h2>Plugins</h2>
+        <ul id="plugins">
+          undefined
+        </ul>
+      </aside>
+    </div>
+
+    <script>
+      window.onload = function() {
+        var COLLAPSE_CLASS = 'collapse';
+        var els = document.querySelectorAll(
+          '.child-type-object>dt,.child-type-array>dt'
+        );
+        for (let el of els) {
+          el.addEventListener('click', function(e) {
+            var classList = e.target.parentElement.parentElement.classList;
+            if (classList.contains(COLLAPSE_CLASS)) {
+              classList.remove(COLLAPSE_CLASS);
+            } else {
+              classList.add(COLLAPSE_CLASS);
+            }
+          });
+        }
+      };
+    </script>
+  </body>
+</html>
