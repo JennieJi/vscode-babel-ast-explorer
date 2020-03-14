@@ -1,1 +1,9 @@
-<li onclick="{{script}}">{{label}}</li>
+<label>
+  <input
+    type="checkbox"
+    value="{{value}}"
+    {{attributes}}
+    onchange="option('{{value}}')"
+  />
+  {{label}}
+</label>

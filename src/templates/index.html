@@ -8,12 +8,36 @@
         --color-ast-secondary: #0c53a3;
         --color-ast-string: #77282d;
         --color-ast-number: #279494;
+        --color-complementry: #ccc;
+        --color-panel: rgba(75, 106, 245, 0.1);
 
         --gap: 0.5em;
       }
 
+      body {
+        font-family: Roboto, Helvetica, Arial;
+      }
+
+      li {
+        list-style: none;
+      }
+
+      aside {
+        position: fixed;
+        top: 0;
+        bottom: 0;
+        right: 0;
+        min-width: 120px;
+        width: 30%;
+        padding: 30px 20px;
+        background: var(--color-panel);
+        overflow-x: hidden;
+        overflow-y: auto;
+      }
+
       #ast {
         color: var(--color-ast-default);
+        font-family: Courier, Calibri, Perpetua;
       }
       .type {
         color: var(--color-ast-primary);
@@ -53,10 +77,9 @@
       .child-type-object > dt::before,
       .child-type-array > dt::before {
         display: inline-block;
-        color: var(--color-ast-primary);
+        color: var(--color-complementry);
         content: '-';
-        padding: 0 0.1em;
-        border: 1px solid var(--color-ast-primary);
+        border: 1px solid var(--color-complementry);
         line-height: 0.6em;
         margin: 0 var(--gap) 0 0;
       }
@@ -118,16 +141,21 @@
 
       .no-loc .key-loc,
       .no-loc .key-start,
-      .no-loc .key-end {
+      .no-loc .key-end,
+      .no-type .key-type,
+      .no-empty .empty {
         display: none;
       }
-      .no-type .key-type {
-        display: none;
+
+      #options label,
+      #plugins label {
+        display: block;
+        margin: 0 0.2em;
       }
     </style>
   </header>
-  <body class="no-loc no-type">
-    <div>
+  <body>
+    <div id="page" class="no-loc no-type no-empty">
       <dl id="ast">
         <dt>{</dt>
         <dd class="child">{{ast}}</dd>
@@ -136,24 +164,35 @@
       <aside>
         <div id="versions">
           <label>
-            Version:
+            <em>@babel/parser</em> version:
             <select value="{{version}}">
               {{versions}}
             </select>
           </label>
         </div>
         <h2>Options</h2>
-        <ul id="options">
-          {{Options}}
-        </ul>
+        <div id="options">
+          {{options}}
+        </div>
         <h2>Plugins</h2>
-        <ul id="plugins">
+        <div id="plugins">
           {{plugins}}
-        </ul>
+        </div>
       </aside>
     </div>
 
     <script>
+      function toggleClass(el, classname) {
+        var classList = el.classList;
+        if (classList.contains(classname)) {
+          classList.remove(classname);
+        } else {
+          classList.add(classname);
+        }
+      }
+      window.option = function(value) {
+        toggleClass(document.getElementById('page'), value);
+      };
       window.onload = function() {
         var COLLAPSE_CLASS = 'collapse';
         var els = document.querySelectorAll(
@@ -161,12 +200,7 @@
         );
         for (let el of els) {
           el.addEventListener('click', function(e) {
-            var classList = e.target.parentElement.parentElement.classList;
-            if (classList.contains(COLLAPSE_CLASS)) {
-              classList.remove(COLLAPSE_CLASS);
-            } else {
-              classList.add(COLLAPSE_CLASS);
-            }
+            toggleClass(e.target.parentElement.parentElement, COLLAPSE_CLASS);
           });
         }
       };
