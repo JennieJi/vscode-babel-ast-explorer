@@ -11,7 +11,10 @@ const templateCache = {} as { [path: string]: Template | null };
 function getTemplate(templatename: string) {
   if (!templateCache[templatename]) {
     const raw = fs
-      .readFileSync(path.resolve(__dirname, 'templates', templatename), 'utf-8')
+      .readFileSync(
+        path.resolve(__dirname, '../resources/templates', templatename),
+        'utf-8'
+      )
       .toString();
     let root = null as Template | null;
     let last = null as Template | null;

@@ -14,29 +14,21 @@
         --gap: 0.5em;
       }
 
+      body.vscode-dark {
+        --color-ast-default: #f5f5f5;
+        --color-ast-primary: #8a6411;
+        --color-ast-secondary: #f5f5f5;
+        --color-ast-string: #fd5762;
+        --color-ast-number: #1ab8b8;
+        --color-complementry: #ccc;
+      }
+
       body {
+        color: var(--color-ast-default);
         font-family: Roboto, Helvetica, Arial;
       }
 
-      li {
-        list-style: none;
-      }
-
-      aside {
-        position: fixed;
-        top: 0;
-        bottom: 0;
-        right: 0;
-        min-width: 120px;
-        width: 30%;
-        padding: 30px 20px;
-        background: var(--color-panel);
-        overflow-x: hidden;
-        overflow-y: auto;
-      }
-
       #ast {
-        color: var(--color-ast-default);
         font-family: Courier, Calibri, Perpetua;
       }
       .type {
@@ -82,7 +74,7 @@
         content: '-';
         border: 1px solid var(--color-complementry);
         line-height: 0.6em;
-        margin: 0 var(--gap) 0 0;
+        margin: 0 var(--gap) 0 -1.2em;
       }
       dl.type- > dt::before {
         content: none;
@@ -148,39 +140,15 @@
       .no-empty .empty {
         display: none;
       }
-
-      #options label,
-      #plugins label {
-        display: block;
-        margin: 0.5em 0;
-      }
     </style>
   </header>
   <body>
-    <div id="page" class="no-loc no-type no-empty">
+    <div id="page" class="{{class}}">
       <dl id="ast">
         <dt>{</dt>
         <dd class="child">{{ast}}</dd>
         <dd>}</dd>
       </dl>
-      <aside>
-        <div id="versions">
-          <label>
-            <em>@babel/parser</em> version:
-            <select value="{{version}}">
-              {{versions}}
-            </select>
-          </label>
-        </div>
-        <h2>Options</h2>
-        <div id="options">
-          {{options}}
-        </div>
-        <h2>Plugins</h2>
-        <div id="plugins">
-          {{plugins}}
-        </div>
-      </aside>
     </div>
 
     <script>

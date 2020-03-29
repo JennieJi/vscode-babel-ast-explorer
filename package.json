@@ -2,6 +2,11 @@
   "name": "babel-ast-explorer",
   "displayName": "babel-ast-explorer",
   "description": "AST preview with @babel/parser",
+  "publisher": "Jennie Ji",
+  "author": {
+    "name": "Jennie Ji",
+    "email": "jennie.ji@hotmail.com"
+  },
   "version": "0.0.1",
   "license": "MIT",
   "engines": {
@@ -11,7 +16,8 @@
     "Other"
   ],
   "activationEvents": [
-    "onCommand:babelAstExplorer.start"
+    "onCommand:babelAstExplorer.start",
+    "onView:babelAstExplorer"
   ],
   "main": "./out/extension.js",
   "contributes": {
@@ -19,13 +25,48 @@
       {
         "command": "babelAstExplorer.start",
         "title": "Open",
-        "category": "Babel AST Explorer"
+        "category": "Babel AST Explorer",
+        "icon": "resources/icons/run.svg"
       }
-    ]
+    ],
+    "menus": {
+      "view/title": [
+        {
+          "command": "babelAstExplorer.start",
+          "when": "view == babelAstExplorer",
+          "group": "navigation"
+        }
+      ]
+    },
+    "views": {
+      "babelAstExplorer": [
+        {
+          "id": "babelAstExplorer-plugins",
+          "name": "Plugins"
+        },
+        {
+          "id": "babelAstExplorer-options",
+          "name": "Options"
+        },
+        {
+          "id": "babelAstExplorer-versions",
+          "name": "Babel Version"
+        }
+      ]
+    },
+    "viewsContainers": {
+      "activitybar": [
+        {
+          "id": "babelAstExplorer",
+          "title": "Babel AST Explorer",
+          "icon": "resources/icons/babel-logo-minimal.svg"
+        }
+      ]
+    }
   },
   "scripts": {
     "vscode:prepublish": "yarn run compile",
-    "compile": "tsc -p ./ && cp -R -f src/templates out",
+    "compile": "tsc -p ./",
     "lint": "eslint src --ext ts",
     "watch": "tsc -watch -p ./",
     "pretest": "yarn run compile && yarn run lint",
@@ -46,6 +87,13 @@
     "vscode-test": "^1.3.0"
   },
   "dependencies": {
-    "@babel/parser": "^7.8.7"
+    "@babel/parser": "7.8.7"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/JennieJi/vscode-babel-ast-explorer"
+  },
+  "bugs": {
+    "url": "https://github.com/JennieJi/vscode-babel-ast-explorer/issues"
   }
 }
