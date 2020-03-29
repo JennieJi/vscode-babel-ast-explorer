@@ -1,26 +1,49 @@
 import * as vscode from 'vscode';
-import getWebviewContent from './getWebviewContent';
+import ASTView, { ASTViewOptions } from './astView';
+import OptionsView from './optionsView';
+import { COMMANDS } from './commands';
+import { OPTIONS } from './options';
 
 export function activate(context: vscode.ExtensionContext) {
-  const start = vscode.commands.registerCommand(
-    'babelAstExplorer.start',
-    async () => {
-      const panel = vscode.window.createWebviewPanel(
-        'babelAstExplorer',
-        'Babel AST Explorer',
-        vscode.ViewColumn.Beside,
-        {}
-      );
-
-      // vscode.window.activeTextEditor?.document.languageId
-
-      panel.webview.html = await getWebviewContent(
-        vscode.window.activeTextEditor?.document.getText() || ''
-      );
-    }
+  let astView: ASTView | undefined;
+  let optionsView: OptionsView | undefined;
+  const defaultOptions = OPTIONS.map(({ value }) => value);
+  context.subscriptions.push(
+    vscode.commands.registerCommand(COMMANDS.start, () => {
+      if (!optionsView) {
+        optionsView = new OptionsView({
+          options: defaultOptions
+        });
+      }
+      if (astView) {
+        astView.updateEditor();
+      } else {
+        astView = new ASTView(
+          () => {
+            if (optionsView) {
+              optionsView.dispose();
+              optionsView = undefined;
+            }
+            astView = undefined;
+          },
+          { options: defaultOptions }
+        );
+      }
+    })
   );
-
-  context.subscriptions.push(start);
+  context.subscriptions.push(
+    vscode.commands.registerCommand(
+      COMMANDS.update,
+      (options: ASTViewOptions) => {
+        if (astView) {
+          astView.update(options);
+        }
+        if (optionsView) {
+          optionsView.update(options);
+        }
+      }
+    )
+  );
 }
 
 export function deactivate() {}

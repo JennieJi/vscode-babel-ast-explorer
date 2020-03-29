@@ -8,12 +8,36 @@
         --color-ast-secondary: #0c53a3;
         --color-ast-string: #77282d;
         --color-ast-number: #279494;
+        --color-complementry: #ccc;
+        --color-panel: rgba(75, 106, 245, 0.1);
 
         --gap: 0.5em;
       }
 
+      body {
+        font-family: Roboto, Helvetica, Arial;
+      }
+
+      li {
+        list-style: none;
+      }
+
+      aside {
+        position: fixed;
+        top: 0;
+        bottom: 0;
+        right: 0;
+        min-width: 120px;
+        width: 30%;
+        padding: 30px 20px;
+        background: var(--color-panel);
+        overflow-x: hidden;
+        overflow-y: auto;
+      }
+
       #ast {
         color: var(--color-ast-default);
+        font-family: Courier, Calibri, Perpetua;
       }
       .type {
         color: var(--color-ast-primary);
@@ -41,6 +65,7 @@
       dl,
       dd,
       dt {
+        display: table;
         margin: 0;
         padding: 0;
       }
@@ -53,10 +78,9 @@
       .child-type-object > dt::before,
       .child-type-array > dt::before {
         display: inline-block;
-        color: var(--color-ast-primary);
+        color: var(--color-complementry);
         content: '-';
-        padding: 0 0.1em;
-        border: 1px solid var(--color-ast-primary);
+        border: 1px solid var(--color-complementry);
         line-height: 0.6em;
         margin: 0 var(--gap) 0 0;
       }
@@ -77,6 +101,7 @@
       dl.collapse > dd::after {
         color: var(--color-ast-primary);
         content: '...';
+        background-color: rgba(5, 5, 5, 0.05);
       }
       dl.collapse > dd > dl {
         display: none;
@@ -118,20 +143,25 @@
 
       .no-loc .key-loc,
       .no-loc .key-start,
-      .no-loc .key-end {
+      .no-loc .key-end,
+      .no-type .key-type,
+      .no-empty .empty {
         display: none;
       }
-      .no-type .key-type {
-        display: none;
+
+      #options label,
+      #plugins label {
+        display: block;
+        margin: 0.5em 0;
       }
     </style>
   </header>
-  <body class="no-loc no-type">
-    <div>
+  <body>
+    <div id="page" class="no-loc no-type no-empty">
       <dl id="ast">
         <dt>{</dt>
         <dd class="child"><dl
-  class="key-type type- child-type-string line-"
+  class="key-type type- child-type-string line- "
   data-col-start=""
   data-col-end=""
 >
@@ -140,7 +170,7 @@
 </dl>
 
 <dl
-  class="key-start type- child-type-number line-"
+  class="key-start type- child-type-number line- "
   data-col-start=""
   data-col-end=""
 >
@@ -149,7 +179,7 @@
 </dl>
 
 <dl
-  class="key-end type- child-type-number line-"
+  class="key-end type- child-type-number line- "
   data-col-start=""
   data-col-end=""
 >
@@ -158,19 +188,19 @@
 </dl>
 
 <dl
-  class="key-loc type- child-type-object line-"
+  class="key-loc type- child-type-object line- "
   data-col-start=""
   data-col-end=""
 >
   <dt><span class="key">loc</span><span class="type"></span></dt>
   <dd class="child"><dl
-  class="key-start type- child-type-object line-"
+  class="key-start type- child-type-object line- "
   data-col-start=""
   data-col-end=""
 >
   <dt><span class="key">start</span><span class="type"></span></dt>
   <dd class="child"><dl
-  class="key-line type- child-type-number line-"
+  class="key-line type- child-type-number line- "
   data-col-start=""
   data-col-end=""
 >
@@ -179,7 +209,7 @@
 </dl>
 
 <dl
-  class="key-column type- child-type-number line-"
+  class="key-column type- child-type-number line- "
   data-col-start=""
   data-col-end=""
 >
@@ -190,13 +220,13 @@
 </dl>
 
 <dl
-  class="key-end type- child-type-object line-"
+  class="key-end type- child-type-object line- "
   data-col-start=""
   data-col-end=""
 >
   <dt><span class="key">end</span><span class="type"></span></dt>
   <dd class="child"><dl
-  class="key-line type- child-type-number line-"
+  class="key-line type- child-type-number line- "
   data-col-start=""
   data-col-end=""
 >
@@ -205,7 +235,7 @@
 </dl>
 
 <dl
-  class="key-column type- child-type-number line-"
+  class="key-column type- child-type-number line- "
   data-col-start=""
   data-col-end=""
 >
@@ -218,7 +248,7 @@
 </dl>
 
 <dl
-  class="key-errors type- child-type-array line-"
+  class="key-errors type- child-type-array line- empty"
   data-col-start=""
   data-col-end=""
 >
@@ -227,13 +257,13 @@
 </dl>
 
 <dl
-  class="key-program type-Program child-type-object line-1"
+  class="key-program type-Program child-type-object line-1 "
   data-col-start="0"
   data-col-end="24"
 >
   <dt><span class="key">program</span><span class="type">Program</span></dt>
   <dd class="child"><dl
-  class="key-type type- child-type-string line-"
+  class="key-type type- child-type-string line- "
   data-col-start=""
   data-col-end=""
 >
@@ -242,7 +272,7 @@
 </dl>
 
 <dl
-  class="key-start type- child-type-number line-"
+  class="key-start type- child-type-number line- "
   data-col-start=""
   data-col-end=""
 >
@@ -251,7 +281,7 @@
 </dl>
 
 <dl
-  class="key-end type- child-type-number line-"
+  class="key-end type- child-type-number line- "
   data-col-start=""
   data-col-end=""
 >
@@ -260,19 +290,19 @@
 </dl>
 
 <dl
-  class="key-loc type- child-type-object line-"
+  class="key-loc type- child-type-object line- "
   data-col-start=""
   data-col-end=""
 >
   <dt><span class="key">loc</span><span class="type"></span></dt>
   <dd class="child"><dl
-  class="key-start type- child-type-object line-"
+  class="key-start type- child-type-object line- "
   data-col-start=""
   data-col-end=""
 >
   <dt><span class="key">start</span><span class="type"></span></dt>
   <dd class="child"><dl
-  class="key-line type- child-type-number line-"
+  class="key-line type- child-type-number line- "
   data-col-start=""
   data-col-end=""
 >
@@ -281,7 +311,7 @@
 </dl>
 
 <dl
-  class="key-column type- child-type-number line-"
+  class="key-column type- child-type-number line- "
   data-col-start=""
   data-col-end=""
 >
@@ -292,13 +322,13 @@
 </dl>
 
 <dl
-  class="key-end type- child-type-object line-"
+  class="key-end type- child-type-object line- "
   data-col-start=""
   data-col-end=""
 >
   <dt><span class="key">end</span><span class="type"></span></dt>
   <dd class="child"><dl
-  class="key-line type- child-type-number line-"
+  class="key-line type- child-type-number line- "
   data-col-start=""
   data-col-end=""
 >
@@ -307,7 +337,7 @@
 </dl>
 
 <dl
-  class="key-column type- child-type-number line-"
+  class="key-column type- child-type-number line- "
   data-col-start=""
   data-col-end=""
 >
@@ -320,7 +350,7 @@
 </dl>
 
 <dl
-  class="key-sourceType type- child-type-string line-"
+  class="key-sourceType type- child-type-string line- "
   data-col-start=""
   data-col-end=""
 >
@@ -329,7 +359,7 @@
 </dl>
 
 <dl
-  class="key-interpreter type- child-type-null line-"
+  class="key-interpreter type- child-type-null line- empty"
   data-col-start=""
   data-col-end=""
 >
@@ -338,19 +368,19 @@
 </dl>
 
 <dl
-  class="key-body type- child-type-array line-"
+  class="key-body type- child-type-array line- "
   data-col-start=""
   data-col-end=""
 >
   <dt><span class="key">body</span><span class="type"></span></dt>
   <dd class="child"><dl
-  class="key-0 type-ImportDeclaration child-type-object line-1"
+  class="key-0 type-ImportDeclaration child-type-object line-1 "
   data-col-start="0"
   data-col-end="24"
 >
   <dt><span class="key">0</span><span class="type">ImportDeclaration</span></dt>
   <dd class="child"><dl
-  class="key-type type- child-type-string line-"
+  class="key-type type- child-type-string line- "
   data-col-start=""
   data-col-end=""
 >
@@ -359,7 +389,7 @@
 </dl>
 
 <dl
-  class="key-start type- child-type-number line-"
+  class="key-start type- child-type-number line- "
   data-col-start=""
   data-col-end=""
 >
@@ -368,7 +398,7 @@
 </dl>
 
 <dl
-  class="key-end type- child-type-number line-"
+  class="key-end type- child-type-number line- "
   data-col-start=""
   data-col-end=""
 >
@@ -377,19 +407,19 @@
 </dl>
 
 <dl
-  class="key-loc type- child-type-object line-"
+  class="key-loc type- child-type-object line- "
   data-col-start=""
   data-col-end=""
 >
   <dt><span class="key">loc</span><span class="type"></span></dt>
   <dd class="child"><dl
-  class="key-start type- child-type-object line-"
+  class="key-start type- child-type-object line- "
   data-col-start=""
   data-col-end=""
 >
   <dt><span class="key">start</span><span class="type"></span></dt>
   <dd class="child"><dl
-  class="key-line type- child-type-number line-"
+  class="key-line type- child-type-number line- "
   data-col-start=""
   data-col-end=""
 >
@@ -398,7 +428,7 @@
 </dl>
 
 <dl
-  class="key-column type- child-type-number line-"
+  class="key-column type- child-type-number line- "
   data-col-start=""
   data-col-end=""
 >
@@ -409,13 +439,13 @@
 </dl>
 
 <dl
-  class="key-end type- child-type-object line-"
+  class="key-end type- child-type-object line- "
   data-col-start=""
   data-col-end=""
 >
   <dt><span class="key">end</span><span class="type"></span></dt>
   <dd class="child"><dl
-  class="key-line type- child-type-number line-"
+  class="key-line type- child-type-number line- "
   data-col-start=""
   data-col-end=""
 >
@@ -424,7 +454,7 @@
 </dl>
 
 <dl
-  class="key-column type- child-type-number line-"
+  class="key-column type- child-type-number line- "
   data-col-start=""
   data-col-end=""
 >
@@ -437,19 +467,19 @@
 </dl>
 
 <dl
-  class="key-specifiers type- child-type-array line-"
+  class="key-specifiers type- child-type-array line- "
   data-col-start=""
   data-col-end=""
 >
   <dt><span class="key">specifiers</span><span class="type"></span></dt>
   <dd class="child"><dl
-  class="key-0 type-ImportDefaultSpecifier child-type-object line-1"
+  class="key-0 type-ImportDefaultSpecifier child-type-object line-1 "
   data-col-start="7"
   data-col-end="8"
 >
   <dt><span class="key">0</span><span class="type">ImportDefaultSpecifier</span></dt>
   <dd class="child"><dl
-  class="key-type type- child-type-string line-"
+  class="key-type type- child-type-string line- "
   data-col-start=""
   data-col-end=""
 >
@@ -458,7 +488,7 @@
 </dl>
 
 <dl
-  class="key-start type- child-type-number line-"
+  class="key-start type- child-type-number line- "
   data-col-start=""
   data-col-end=""
 >
@@ -467,7 +497,7 @@
 </dl>
 
 <dl
-  class="key-end type- child-type-number line-"
+  class="key-end type- child-type-number line- "
   data-col-start=""
   data-col-end=""
 >
@@ -476,19 +506,19 @@
 </dl>
 
 <dl
-  class="key-loc type- child-type-object line-"
+  class="key-loc type- child-type-object line- "
   data-col-start=""
   data-col-end=""
 >
   <dt><span class="key">loc</span><span class="type"></span></dt>
   <dd class="child"><dl
-  class="key-start type- child-type-object line-"
+  class="key-start type- child-type-object line- "
   data-col-start=""
   data-col-end=""
 >
   <dt><span class="key">start</span><span class="type"></span></dt>
   <dd class="child"><dl
-  class="key-line type- child-type-number line-"
+  class="key-line type- child-type-number line- "
   data-col-start=""
   data-col-end=""
 >
@@ -497,7 +527,7 @@
 </dl>
 
 <dl
-  class="key-column type- child-type-number line-"
+  class="key-column type- child-type-number line- "
   data-col-start=""
   data-col-end=""
 >
@@ -508,13 +538,13 @@
 </dl>
 
 <dl
-  class="key-end type- child-type-object line-"
+  class="key-end type- child-type-object line- "
   data-col-start=""
   data-col-end=""
 >
   <dt><span class="key">end</span><span class="type"></span></dt>
   <dd class="child"><dl
-  class="key-line type- child-type-number line-"
+  class="key-line type- child-type-number line- "
   data-col-start=""
   data-col-end=""
 >
@@ -523,7 +553,7 @@
 </dl>
 
 <dl
-  class="key-column type- child-type-number line-"
+  class="key-column type- child-type-number line- "
   data-col-start=""
   data-col-end=""
 >
@@ -536,13 +566,13 @@
 </dl>
 
 <dl
-  class="key-local type-Identifier child-type-object line-1"
+  class="key-local type-Identifier child-type-object line-1 "
   data-col-start="7"
   data-col-end="8"
 >
   <dt><span class="key">local</span><span class="type">Identifier</span></dt>
   <dd class="child"><dl
-  class="key-type type- child-type-string line-"
+  class="key-type type- child-type-string line- "
   data-col-start=""
   data-col-end=""
 >
@@ -551,7 +581,7 @@
 </dl>
 
 <dl
-  class="key-start type- child-type-number line-"
+  class="key-start type- child-type-number line- "
   data-col-start=""
   data-col-end=""
 >
@@ -560,7 +590,7 @@
 </dl>
 
 <dl
-  class="key-end type- child-type-number line-"
+  class="key-end type- child-type-number line- "
   data-col-start=""
   data-col-end=""
 >
@@ -569,19 +599,19 @@
 </dl>
 
 <dl
-  class="key-loc type- child-type-object line-"
+  class="key-loc type- child-type-object line- "
   data-col-start=""
   data-col-end=""
 >
   <dt><span class="key">loc</span><span class="type"></span></dt>
   <dd class="child"><dl
-  class="key-start type- child-type-object line-"
+  class="key-start type- child-type-object line- "
   data-col-start=""
   data-col-end=""
 >
   <dt><span class="key">start</span><span class="type"></span></dt>
   <dd class="child"><dl
-  class="key-line type- child-type-number line-"
+  class="key-line type- child-type-number line- "
   data-col-start=""
   data-col-end=""
 >
@@ -590,7 +620,7 @@
 </dl>
 
 <dl
-  class="key-column type- child-type-number line-"
+  class="key-column type- child-type-number line- "
   data-col-start=""
   data-col-end=""
 >
@@ -601,13 +631,13 @@
 </dl>
 
 <dl
-  class="key-end type- child-type-object line-"
+  class="key-end type- child-type-object line- "
   data-col-start=""
   data-col-end=""
 >
   <dt><span class="key">end</span><span class="type"></span></dt>
   <dd class="child"><dl
-  class="key-line type- child-type-number line-"
+  class="key-line type- child-type-number line- "
   data-col-start=""
   data-col-end=""
 >
@@ -616,7 +646,7 @@
 </dl>
 
 <dl
-  class="key-column type- child-type-number line-"
+  class="key-column type- child-type-number line- "
   data-col-start=""
   data-col-end=""
 >
@@ -627,7 +657,7 @@
 </dl>
 
 <dl
-  class="key-identifierName type- child-type-string line-"
+  class="key-identifierName type- child-type-string line- "
   data-col-start=""
   data-col-end=""
 >
@@ -638,7 +668,7 @@
 </dl>
 
 <dl
-  class="key-name type- child-type-string line-"
+  class="key-name type- child-type-string line- "
   data-col-start=""
   data-col-end=""
 >
@@ -653,13 +683,13 @@
 </dl>
 
 <dl
-  class="key-source type-StringLiteral child-type-object line-1"
+  class="key-source type-StringLiteral child-type-object line-1 "
   data-col-start="14"
   data-col-end="24"
 >
   <dt><span class="key">source</span><span class="type">StringLiteral</span></dt>
   <dd class="child"><dl
-  class="key-type type- child-type-string line-"
+  class="key-type type- child-type-string line- "
   data-col-start=""
   data-col-end=""
 >
@@ -668,7 +698,7 @@
 </dl>
 
 <dl
-  class="key-start type- child-type-number line-"
+  class="key-start type- child-type-number line- "
   data-col-start=""
   data-col-end=""
 >
@@ -677,7 +707,7 @@
 </dl>
 
 <dl
-  class="key-end type- child-type-number line-"
+  class="key-end type- child-type-number line- "
   data-col-start=""
   data-col-end=""
 >
@@ -686,19 +716,19 @@
 </dl>
 
 <dl
-  class="key-loc type- child-type-object line-"
+  class="key-loc type- child-type-object line- "
   data-col-start=""
   data-col-end=""
 >
   <dt><span class="key">loc</span><span class="type"></span></dt>
   <dd class="child"><dl
-  class="key-start type- child-type-object line-"
+  class="key-start type- child-type-object line- "
   data-col-start=""
   data-col-end=""
 >
   <dt><span class="key">start</span><span class="type"></span></dt>
   <dd class="child"><dl
-  class="key-line type- child-type-number line-"
+  class="key-line type- child-type-number line- "
   data-col-start=""
   data-col-end=""
 >
@@ -707,7 +737,7 @@
 </dl>
 
 <dl
-  class="key-column type- child-type-number line-"
+  class="key-column type- child-type-number line- "
   data-col-start=""
   data-col-end=""
 >
@@ -718,13 +748,13 @@
 </dl>
 
 <dl
-  class="key-end type- child-type-object line-"
+  class="key-end type- child-type-object line- "
   data-col-start=""
   data-col-end=""
 >
   <dt><span class="key">end</span><span class="type"></span></dt>
   <dd class="child"><dl
-  class="key-line type- child-type-number line-"
+  class="key-line type- child-type-number line- "
   data-col-start=""
   data-col-end=""
 >
@@ -733,7 +763,7 @@
 </dl>
 
 <dl
-  class="key-column type- child-type-number line-"
+  class="key-column type- child-type-number line- "
   data-col-start=""
   data-col-end=""
 >
@@ -746,13 +776,13 @@
 </dl>
 
 <dl
-  class="key-extra type- child-type-object line-"
+  class="key-extra type- child-type-object line- "
   data-col-start=""
   data-col-end=""
 >
   <dt><span class="key">extra</span><span class="type"></span></dt>
   <dd class="child"><dl
-  class="key-rawValue type- child-type-string line-"
+  class="key-rawValue type- child-type-string line- "
   data-col-start=""
   data-col-end=""
 >
@@ -761,7 +791,7 @@
 </dl>
 
 <dl
-  class="key-raw type- child-type-string line-"
+  class="key-raw type- child-type-string line- "
   data-col-start=""
   data-col-end=""
 >
@@ -772,7 +802,7 @@
 </dl>
 
 <dl
-  class="key-value type- child-type-string line-"
+  class="key-value type- child-type-string line- "
   data-col-start=""
   data-col-end=""
 >
@@ -787,7 +817,7 @@
 </dl>
 
 <dl
-  class="key-directives type- child-type-array line-"
+  class="key-directives type- child-type-array line- empty"
   data-col-start=""
   data-col-end=""
 >
@@ -798,7 +828,7 @@
 </dl>
 
 <dl
-  class="key-comments type- child-type-array line-"
+  class="key-comments type- child-type-array line- empty"
   data-col-start=""
   data-col-end=""
 >
@@ -811,24 +841,283 @@
       <aside>
         <div id="versions">
           <label>
-            Version:
+            <em>@babel/parser</em> version:
             <select value="undefined">
               
             </select>
           </label>
         </div>
         <h2>Options</h2>
-        <ul id="options">
-          Options
-        </ul>
+        <div id="options">
+          <label>
+  <input
+    type="checkbox"
+    value="no-empty"
+    checked
+    onchange="option('no-empty')"
+  />
+  Hide empty
+</label>
+
+<label>
+  <input
+    type="checkbox"
+    value="no-loc"
+    checked
+    onchange="option('no-loc')"
+  />
+  Hide location
+</label>
+
+<label>
+  <input
+    type="checkbox"
+    value="no-type"
+    checked
+    onchange="option('no-type')"
+  />
+  Hide types
+</label>
+
+        </div>
         <h2>Plugins</h2>
-        <ul id="plugins">
-          undefined
-        </ul>
+        <div id="plugins">
+          <label>
+  <input
+    type="checkbox"
+    value="jsx"
+    
+    onchange="option('jsx')"
+  />
+  jsx
+</label>
+
+<label>
+  <input
+    type="checkbox"
+    value="flow"
+    
+    onchange="option('flow')"
+  />
+  flow
+</label>
+
+<label>
+  <input
+    type="checkbox"
+    value="typescript"
+    
+    onchange="option('typescript')"
+  />
+  typescript
+</label>
+
+<label>
+  <input
+    type="checkbox"
+    value="bigInt"
+    
+    onchange="option('bigInt')"
+  />
+  bigInt
+</label>
+
+<label>
+  <input
+    type="checkbox"
+    value="classProperties"
+    
+    onchange="option('classProperties')"
+  />
+  classProperties
+</label>
+
+<label>
+  <input
+    type="checkbox"
+    value="classPrivateProperties"
+    
+    onchange="option('classPrivateProperties')"
+  />
+  classPrivateProperties
+</label>
+
+<label>
+  <input
+    type="checkbox"
+    value="classPrivateMethods"
+    
+    onchange="option('classPrivateMethods')"
+  />
+  classPrivateMethods
+</label>
+
+<label>
+  <input
+    type="checkbox"
+    value="decorators - legacy"
+    
+    onchange="option('decorators - legacy')"
+  />
+  decorators - legacy
+</label>
+
+<label>
+  <input
+    type="checkbox"
+    value="decoratorsBeforeExport"
+    
+    onchange="option('decoratorsBeforeExport')"
+  />
+  decoratorsBeforeExport
+</label>
+
+<label>
+  <input
+    type="checkbox"
+    value="decorators"
+    
+    onchange="option('decorators')"
+  />
+  decorators
+</label>
+
+<label>
+  <input
+    type="checkbox"
+    value="decoratorsBeforeExport"
+    
+    onchange="option('decoratorsBeforeExport')"
+  />
+  decoratorsBeforeExport
+</label>
+
+<label>
+  <input
+    type="checkbox"
+    value="doExpressions"
+    
+    onchange="option('doExpressions')"
+  />
+  doExpressions
+</label>
+
+<label>
+  <input
+    type="checkbox"
+    value="dynamicImport"
+    
+    onchange="option('dynamicImport')"
+  />
+  dynamicImport
+</label>
+
+<label>
+  <input
+    type="checkbox"
+    value="exportDefaultFrom"
+    
+    onchange="option('exportDefaultFrom')"
+  />
+  exportDefaultFrom
+</label>
+
+<label>
+  <input
+    type="checkbox"
+    value="nullishCoalescingOperator"
+    
+    onchange="option('nullishCoalescingOperator')"
+  />
+  nullishCoalescingOperator
+</label>
+
+<label>
+  <input
+    type="checkbox"
+    value="numericSeparator"
+    
+    onchange="option('numericSeparator')"
+  />
+  numericSeparator
+</label>
+
+<label>
+  <input
+    type="checkbox"
+    value="objectRestSpread"
+    
+    onchange="option('objectRestSpread')"
+  />
+  objectRestSpread
+</label>
+
+<label>
+  <input
+    type="checkbox"
+    value="optionalChaining"
+    
+    onchange="option('optionalChaining')"
+  />
+  optionalChaining
+</label>
+
+<label>
+  <input
+    type="checkbox"
+    value="optionalCatchBinding"
+    
+    onchange="option('optionalCatchBinding')"
+  />
+  optionalCatchBinding
+</label>
+
+<label>
+  <input
+    type="checkbox"
+    value="partialApplication"
+    
+    onchange="option('partialApplication')"
+  />
+  partialApplication
+</label>
+
+<label>
+  <input
+    type="checkbox"
+    value="pipelineOperator"
+    
+    onchange="option('pipelineOperator')"
+  />
+  pipelineOperator
+</label>
+
+<label>
+  <input
+    type="checkbox"
+    value="throwExpressions"
+    
+    onchange="option('throwExpressions')"
+  />
+  throwExpressions
+</label>
+
+        </div>
       </aside>
     </div>
 
     <script>
+      function toggleClass(el, classname) {
+        var classList = el.classList;
+        if (classList.contains(classname)) {
+          classList.remove(classname);
+        } else {
+          classList.add(classname);
+        }
+      }
+      window.option = function(value) {
+        toggleClass(document.getElementById('page'), value);
+      };
       window.onload = function() {
         var COLLAPSE_CLASS = 'collapse';
         var els = document.querySelectorAll(
@@ -836,12 +1125,7 @@
         );
         for (let el of els) {
           el.addEventListener('click', function(e) {
-            var classList = e.target.parentElement.parentElement.classList;
-            if (classList.contains(COLLAPSE_CLASS)) {
-              classList.remove(COLLAPSE_CLASS);
-            } else {
-              classList.add(COLLAPSE_CLASS);
-            }
+            toggleClass(e.target.parentElement.parentElement, COLLAPSE_CLASS);
           });
         }
       };

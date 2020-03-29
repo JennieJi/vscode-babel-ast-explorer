@@ -8,12 +8,28 @@
         --color-ast-secondary: #0c53a3;
         --color-ast-string: #77282d;
         --color-ast-number: #279494;
+        --color-complementry: #ccc;
+        --color-panel: rgba(75, 106, 245, 0.1);
 
         --gap: 0.5em;
       }
 
-      #ast {
+      body.vscode-dark {
+        --color-ast-default: #f5f5f5;
+        --color-ast-primary: #8a6411;
+        --color-ast-secondary: #f5f5f5;
+        --color-ast-string: #fd5762;
+        --color-ast-number: #1ab8b8;
+        --color-complementry: #ccc;
+      }
+
+      body {
         color: var(--color-ast-default);
+        font-family: Roboto, Helvetica, Arial;
+      }
+
+      #ast {
+        font-family: Courier, Calibri, Perpetua;
       }
       .type {
         color: var(--color-ast-primary);
@@ -41,6 +57,7 @@
       dl,
       dd,
       dt {
+        display: table;
         margin: 0;
         padding: 0;
       }
@@ -53,12 +70,11 @@
       .child-type-object > dt::before,
       .child-type-array > dt::before {
         display: inline-block;
-        color: var(--color-ast-primary);
+        color: var(--color-complementry);
         content: '-';
-        padding: 0 0.1em;
-        border: 1px solid var(--color-ast-primary);
+        border: 1px solid var(--color-complementry);
         line-height: 0.6em;
-        margin: 0 var(--gap) 0 0;
+        margin: 0 var(--gap) 0 -1.2em;
       }
       dl.type- > dt::before {
         content: none;
@@ -77,6 +93,7 @@
       dl.collapse > dd::after {
         color: var(--color-ast-primary);
         content: '...';
+        background-color: rgba(5, 5, 5, 0.05);
       }
       dl.collapse > dd > dl {
         display: none;
@@ -118,42 +135,34 @@
 
       .no-loc .key-loc,
       .no-loc .key-start,
-      .no-loc .key-end {
-        display: none;
-      }
-      .no-type .key-type {
+      .no-loc .key-end,
+      .no-type .key-type,
+      .no-empty .empty {
         display: none;
       }
     </style>
   </header>
-  <body class="no-loc no-type">
-    <div>
+  <body>
+    <div id="page" class="{{class}}">
       <dl id="ast">
         <dt>{</dt>
         <dd class="child">{{ast}}</dd>
         <dd>}</dd>
       </dl>
-      <aside>
-        <div id="versions">
-          <label>
-            Version:
-            <select value="{{version}}">
-              {{versions}}
-            </select>
-          </label>
-        </div>
-        <h2>Options</h2>
-        <ul id="options">
-          {{Options}}
-        </ul>
-        <h2>Plugins</h2>
-        <ul id="plugins">
-          {{plugins}}
-        </ul>
-      </aside>
     </div>
 
     <script>
+      function toggleClass(el, classname) {
+        var classList = el.classList;
+        if (classList.contains(classname)) {
+          classList.remove(classname);
+        } else {
+          classList.add(classname);
+        }
+      }
+      window.option = function(value) {
+        toggleClass(document.getElementById('page'), value);
+      };
       window.onload = function() {
         var COLLAPSE_CLASS = 'collapse';
         var els = document.querySelectorAll(
@@ -161,12 +170,7 @@
         );
         for (let el of els) {
           el.addEventListener('click', function(e) {
-            var classList = e.target.parentElement.parentElement.classList;
-            if (classList.contains(COLLAPSE_CLASS)) {
-              classList.remove(COLLAPSE_CLASS);
-            } else {
-              classList.add(COLLAPSE_CLASS);
-            }
+            toggleClass(e.target.parentElement.parentElement, COLLAPSE_CLASS);
           });
         }
       };
