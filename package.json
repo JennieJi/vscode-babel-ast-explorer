@@ -2,6 +2,7 @@
   "name": "babel-ast-explorer",
   "displayName": "babel-ast-explorer",
   "description": "AST preview with @babel/parser",
+  "icon": "icon.jpg",
   "publisher": "jyee721",
   "author": {
     "name": "Jennie Ji",
