@@ -8,7 +8,7 @@
     "name": "Jennie Ji",
     "email": "jennie.ji@hotmail.com"
   },
-  "version": "0.0.1",
+  "version": "0.0.2",
   "license": "MIT",
   "engines": {
     "vscode": "^1.42.0"
@@ -18,7 +18,10 @@
   ],
   "activationEvents": [
     "onCommand:babelAstExplorer.start",
-    "onView:babelAstExplorer"
+    "onLanguage:typescript",
+    "onLanguage:typescriptreact",
+    "onLanguage:javascript",
+    "onLanguage:javascriptreact"
   ],
   "main": "./out/extension.js",
   "contributes": {
@@ -34,8 +37,8 @@
       "view/title": [
         {
           "command": "babelAstExplorer.start",
-          "when": "view == babelAstExplorer",
-          "group": "navigation"
+          "when": "view =~ /babelAstExplorer/",
+          "group": "navigation@2"
         }
       ]
     },

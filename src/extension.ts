@@ -3,6 +3,7 @@ import ASTView, { ASTViewOptions } from './astView';
 import OptionsView from './optionsView';
 import { COMMANDS } from './commands';
 import { OPTIONS } from './options';
+import guessPlugins from './guessPlugins';
 
 export function activate(context: vscode.ExtensionContext) {
   let astView: ASTView | undefined;
@@ -10,9 +11,11 @@ export function activate(context: vscode.ExtensionContext) {
   const defaultOptions = OPTIONS.map(({ value }) => value);
   context.subscriptions.push(
     vscode.commands.registerCommand(COMMANDS.start, () => {
+      const guessedPlugins = guessPlugins(vscode.window.activeTextEditor);
       if (!optionsView) {
         optionsView = new OptionsView({
-          options: defaultOptions
+          options: defaultOptions,
+          plugins: guessedPlugins
         });
       }
       if (astView) {
@@ -26,7 +29,7 @@ export function activate(context: vscode.ExtensionContext) {
             }
             astView = undefined;
           },
-          { options: defaultOptions }
+          { options: defaultOptions, plugins: guessedPlugins }
         );
       }
     })

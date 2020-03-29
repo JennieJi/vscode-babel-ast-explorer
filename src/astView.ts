@@ -19,15 +19,16 @@ class ASTView {
   } as ASTViewOptions;
 
   constructor(onDispose?: () => void, options?: ASTViewOptions) {
+    this.editor = vscode.window.activeTextEditor;
+    const sourcePath = this.editor?.document.uri;
     this.panel = vscode.window.createWebviewPanel(
       'babelAstExplorer',
-      'Babel AST Explorer',
+      this.getTitle(),
       vscode.ViewColumn.Beside,
       {
         enableScripts: true
       }
     );
-    this.editor = vscode.window.activeTextEditor;
     if (onDispose) {
       this.panel.onDidDispose(onDispose);
     }
@@ -54,6 +55,15 @@ class ASTView {
     this.update();
   }
 
+  private getTitle() {
+    const sourcePath = this.editor?.document.fileName;
+    if (sourcePath) {
+      return `AST of ${vscode.workspace.asRelativePath(sourcePath)}`;
+    } else {
+      return 'Babel AST Explorer';
+    }
+  }
+
   private getContent() {
     return this.editor?.document.getText() || '';
   }
@@ -62,6 +72,7 @@ class ASTView {
   }
 
   private async updatePanel() {
+    this.panel.title = this.getTitle();
     this.panel.webview.html = await this.getWebviewContent();
     this.codeVersion = this.getVersion();
   }
@@ -77,7 +88,6 @@ class ASTView {
         plugins
       });
       return simpleTemplate('index.html', {
-        title: 'Babel AST Explorer',
         ast: await renderAst(ast),
         class: options.join(' ')
       });
