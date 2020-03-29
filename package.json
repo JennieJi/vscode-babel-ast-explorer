@@ -3,6 +3,10 @@
   "displayName": "babel-ast-explorer",
   "description": "AST preview with @babel/parser",
   "publisher": "Jennie Ji",
+  "author": {
+    "name": "Jennie Ji",
+    "email": "jennie.ji@hotmail.com"
+  },
   "version": "0.0.1",
   "license": "MIT",
   "engines": {
@@ -83,6 +87,13 @@
     "vscode-test": "^1.3.0"
   },
   "dependencies": {
-    "@babel/parser": "^7.8.7"
+    "@babel/parser": "7.8.7"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/JennieJi/vscode-babel-ast-explorer"
+  },
+  "bugs": {
+    "url": "https://github.com/JennieJi/vscode-babel-ast-explorer/issues"
   }
 }
