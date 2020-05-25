@@ -69,7 +69,8 @@
     }
   },
   "scripts": {
-    "vscode:prepublish": "yarn run compile",
+    "vscode:prepublish": "yarn changelog && yarn run compile",
+    "changelog": "auto-changelog --tag-prefix v -p && git add CHANGELOG.md",
     "compile": "tsc -p ./",
     "lint": "eslint src --ext ts",
     "watch": "tsc -watch -p ./",
@@ -86,6 +87,7 @@
     "@types/vscode": "^1.42.0",
     "@typescript-eslint/eslint-plugin": "^2.18.0",
     "@typescript-eslint/parser": "^2.18.0",
+    "auto-changelog": "latest",
     "eslint": "^6.8.0",
     "eslint-config-prettier": "^6.11.0",
     "eslint-plugin-prettier": "^3.1.3",
