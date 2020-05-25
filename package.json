@@ -68,9 +68,14 @@
       ]
     }
   },
+  "auto-changelog": {
+    "tagPrefix": "v",
+    "ignoreCommitPattern": "^[^[]",
+    "startingVersion": "v0.1.0"
+  },
   "scripts": {
     "vscode:prepublish": "yarn changelog && yarn run compile",
-    "changelog": "auto-changelog --tag-prefix v -p && git add CHANGELOG.md",
+    "changelog": "auto-changelog && git add CHANGELOG.md",
     "compile": "tsc -p ./",
     "lint": "eslint src --ext ts",
     "watch": "tsc -watch -p ./",
