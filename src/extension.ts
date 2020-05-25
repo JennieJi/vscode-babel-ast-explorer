@@ -15,7 +15,7 @@ export function activate(context: vscode.ExtensionContext) {
       if (!optionsView) {
         optionsView = new OptionsView({
           options: defaultOptions,
-          plugins: guessedPlugins
+          plugins: guessedPlugins,
         });
       }
       if (astView) {

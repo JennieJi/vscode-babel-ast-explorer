@@ -33,7 +33,7 @@ export default async function renderAst(ast: Node): Promise<string> {
         line: '' + (node?.loc?.start.line || ''),
         colStart: isNumber(node?.start) ? '' + node?.start : '',
         colEnd: isNumber(node?.end) ? '' + node?.end : '',
-        class: isEmpty ? `empty` : ''
+        class: isEmpty ? `empty` : '',
       });
     })
   );

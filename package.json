@@ -81,17 +81,19 @@
     "@types/glob": "^7.1.1",
     "@types/mocha": "^7.0.2",
     "@types/node": "^12.11.7",
+    "@types/pacote": "^11.1.0",
+    "@types/semver": "^7.2.0",
     "@types/vscode": "^1.42.0",
     "@typescript-eslint/eslint-plugin": "^2.18.0",
     "@typescript-eslint/parser": "^2.18.0",
     "eslint": "^6.8.0",
+    "eslint-config-prettier": "^6.11.0",
+    "eslint-plugin-prettier": "^3.1.3",
     "glob": "^7.1.6",
     "mocha": "^7.1.0",
+    "prettier": "^2.0.5",
     "typescript": "^3.7.5",
     "vscode-test": "^1.3.0"
-  },
-  "dependencies": {
-    "@babel/parser": "7.8.7"
   },
   "repository": {
     "type": "git",
@@ -99,5 +101,10 @@
   },
   "bugs": {
     "url": "https://github.com/JennieJi/vscode-babel-ast-explorer/issues"
+  },
+  "dependencies": {
+    "@babel/parser": "^7.9.6",
+    "pacote": "^11.1.10",
+    "semver": "^7.3.2"
   }
 }

@@ -3,16 +3,16 @@ import { ParserPlugin } from '@babel/parser';
 export const OPTIONS = [
   {
     value: 'no-empty',
-    label: 'Hide empty'
+    label: 'Hide empty',
   },
   {
     value: 'no-loc',
-    label: 'Hide location'
+    label: 'Hide location',
   },
   {
     value: 'no-type',
-    label: 'Hide types'
-  }
+    label: 'Hide types',
+  },
 ];
 export const PLUGINS: ParserPlugin[] = [
   'jsx',
@@ -33,5 +33,5 @@ export const PLUGINS: ParserPlugin[] = [
   'optionalCatchBinding',
   'partialApplication',
   'pipelineOperator',
-  'throwExpressions'
+  'throwExpressions',
 ];

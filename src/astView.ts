@@ -15,7 +15,7 @@ class ASTView {
   private updateTimer?: NodeJS.Timeout;
 
   private options = {
-    sourceType: 'module'
+    sourceType: 'module',
   } as ASTViewOptions;
 
   constructor(onDispose?: () => void, options?: ASTViewOptions) {
@@ -26,7 +26,7 @@ class ASTView {
       this.getTitle(),
       vscode.ViewColumn.Beside,
       {
-        enableScripts: true
+        enableScripts: true,
       }
     );
     if (onDispose) {
@@ -85,11 +85,11 @@ class ASTView {
     try {
       const ast = parse(raw, {
         sourceType,
-        plugins
+        plugins,
       });
       return simpleTemplate('index.html', {
         ast: await renderAst(ast),
-        class: options.join(' ')
+        class: options.join(' '),
       });
     } catch (e) {
       return e.message;
