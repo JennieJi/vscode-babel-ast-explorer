@@ -6,7 +6,7 @@
     {
       "type": "shell",
       "label": "Build",
-      "command": "yarn run compile",
+      "command": "yarn run dev",
       "problemMatcher": "$tsc-watch",
       "isBackground": true,
       "presentation": {

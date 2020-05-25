@@ -2,9 +2,14 @@
 .vscode-test/**
 out/test/**
 src/**
+.eslintrc
 .gitignore
+.prettierrc
 **/tsconfig.json
 **/.eslintrc.json
 **/*.map
 **/*.ts
 **/*.log
+node_modules/**
+*.lock
+webpack.config.js

@@ -77,7 +77,12 @@ class ASTView {
     this.panel.title = this.getTitle();
     this.panel.webview.html = 'Loading...';
     this.codeVersion = this.getVersion();
-    this.panel.webview.html = await this.getWebviewContent();
+    const content = await this.getWebviewContent();
+    if (content) {
+      this.panel.webview.html = content;
+    } else {
+      this.panel.webview.html = 'Error: empty content';
+    }
   }
 
   private async getWebviewContent() {
