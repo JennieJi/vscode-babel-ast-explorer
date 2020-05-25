@@ -11,5 +11,3 @@ Plugins and option selections:
 Click plugin/option to update the webview:
 
 ![change option](https://i.imgur.com/Fe0BHq4.png)
-
-Currently only supports [@babel/parser](https://babeljs.io/docs/en/babel-parser)@`7.8.7`.

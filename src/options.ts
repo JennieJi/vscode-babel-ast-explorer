@@ -1,4 +1,11 @@
-import { ParserPlugin } from '@babel/parser';
+export type OptionNode = {
+  label: string;
+  value: any;
+};
+export type OptionGroup = {
+  key: string;
+  items: OptionNode[];
+};
 
 export const OPTIONS = [
   {
@@ -14,7 +21,7 @@ export const OPTIONS = [
     label: 'Hide types',
   },
 ];
-export const PLUGINS: ParserPlugin[] = [
+export const PLUGINS: string[] = [
   'jsx',
   'flow',
   'typescript',

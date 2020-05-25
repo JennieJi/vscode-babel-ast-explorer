@@ -8,7 +8,7 @@
     "name": "Jennie Ji",
     "email": "jennie.ji@hotmail.com"
   },
-  "version": "0.0.2",
+  "version": "0.1.0",
   "license": "MIT",
   "engines": {
     "vscode": "^1.42.0"
@@ -103,7 +103,6 @@
     "url": "https://github.com/JennieJi/vscode-babel-ast-explorer/issues"
   },
   "dependencies": {
-    "@babel/parser": "^7.9.6",
     "pacote": "^11.1.10",
     "semver": "^7.3.2"
   }
