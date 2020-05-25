@@ -9,15 +9,16 @@ export function activate(context: vscode.ExtensionContext) {
   let astView: ASTView | undefined;
   let optionsView: OptionsView | undefined;
   const defaultOptions = OPTIONS.map(({ value }) => value);
+
+  const guessedPlugins = guessPlugins(vscode.window.activeTextEditor);
+  if (!optionsView) {
+    optionsView = new OptionsView({
+      options: defaultOptions,
+      plugins: guessedPlugins,
+    });
+  }
   context.subscriptions.push(
     vscode.commands.registerCommand(COMMANDS.start, () => {
-      const guessedPlugins = guessPlugins(vscode.window.activeTextEditor);
-      if (!optionsView) {
-        optionsView = new OptionsView({
-          options: defaultOptions,
-          plugins: guessedPlugins
-        });
-      }
       if (astView) {
         astView.updateEditor();
       } else {

@@ -1,20 +1,27 @@
-import { ParserPlugin } from '@babel/parser';
+export type OptionNode = {
+  label: string;
+  value: any;
+};
+export type OptionGroup = {
+  key: string;
+  items: OptionNode[];
+};
 
 export const OPTIONS = [
   {
     value: 'no-empty',
-    label: 'Hide empty'
+    label: 'Hide empty',
   },
   {
     value: 'no-loc',
-    label: 'Hide location'
+    label: 'Hide location',
   },
   {
     value: 'no-type',
-    label: 'Hide types'
-  }
+    label: 'Hide types',
+  },
 ];
-export const PLUGINS: ParserPlugin[] = [
+export const PLUGINS: string[] = [
   'jsx',
   'flow',
   'typescript',
@@ -33,5 +40,5 @@ export const PLUGINS: ParserPlugin[] = [
   'optionalCatchBinding',
   'partialApplication',
   'pipelineOperator',
-  'throwExpressions'
+  'throwExpressions',
 ];

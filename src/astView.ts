@@ -1,11 +1,13 @@
 import * as vscode from 'vscode';
-import { parse, ParserPlugin, ParserOptions } from '@babel/parser';
 import renderAst from './renderAst';
 import simpleTemplate from './simpleTemplate';
+import { resolveVersion } from './parserVersion';
 
-export type ASTViewOptions = ParserOptions & {
+export type ASTViewOptions = {
   babelVersion?: string;
   options?: string[];
+  plugins?: string[];
+  sourceType?: string;
 };
 
 class ASTView {
@@ -15,7 +17,7 @@ class ASTView {
   private updateTimer?: NodeJS.Timeout;
 
   private options = {
-    sourceType: 'module'
+    sourceType: 'module',
   } as ASTViewOptions;
 
   constructor(onDispose?: () => void, options?: ASTViewOptions) {
@@ -26,7 +28,7 @@ class ASTView {
       this.getTitle(),
       vscode.ViewColumn.Beside,
       {
-        enableScripts: true
+        enableScripts: true,
       }
     );
     if (onDispose) {
@@ -73,23 +75,25 @@ class ASTView {
 
   private async updatePanel() {
     this.panel.title = this.getTitle();
-    this.panel.webview.html = await this.getWebviewContent();
+    this.panel.webview.html = 'Loading...';
     this.codeVersion = this.getVersion();
+    this.panel.webview.html = await this.getWebviewContent();
   }
 
   private async getWebviewContent() {
     const raw = this.getContent();
-    const { sourceType, plugins, options = [] } =
+    const { babelVersion, sourceType, plugins, options = [] } =
       this.options || ({} as ASTViewOptions);
 
     try {
+      const { parse } = await resolveVersion(babelVersion);
       const ast = parse(raw, {
         sourceType,
-        plugins
+        plugins,
       });
       return simpleTemplate('index.html', {
         ast: await renderAst(ast),
-        class: options.join(' ')
+        class: options.join(' '),
       });
     } catch (e) {
       return e.message;

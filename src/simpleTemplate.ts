@@ -23,7 +23,7 @@ function getTemplate(templatename: string) {
       const partial = {
         partial: raw.substring(endOffset, offset),
         param,
-        next: null
+        next: null,
       };
       if (last) {
         last.next = partial;
@@ -37,7 +37,7 @@ function getTemplate(templatename: string) {
     const lastPartial = {
       partial: raw.substring(endOffset),
       param: null,
-      next: null
+      next: null,
     };
     if (last) {
       last.next = lastPartial;

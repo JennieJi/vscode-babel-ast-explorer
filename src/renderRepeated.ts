@@ -5,7 +5,7 @@ export default async function renderRepeated(
   params: { [key: string]: any }[]
 ): Promise<string> {
   const ret = await Promise.all(
-    params.map(async p => {
+    params.map(async (p) => {
       return simpleTemplate(template, p);
     })
   );

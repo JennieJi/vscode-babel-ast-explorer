@@ -7,7 +7,7 @@ suite('simpleTemplate()', () => {
       simpleTemplate('node.html', {
         key: 'key',
         type: 'Type',
-        child: '{}'
+        child: '{}',
       }).length > 0
     );
   });
