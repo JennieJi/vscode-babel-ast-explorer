@@ -392,7 +392,7 @@ asynckit@^0.4.0:
   resolved "https://registry.yarnpkg.com/asynckit/-/asynckit-0.4.0.tgz#c79ed97f7f34cb8f2ba1bc9790bcc366474b4b79"
   integrity sha1-x57Zf380y48robyXkLzDZkdLS3k=
 
-auto-changelog@^2.0.0:
+auto-changelog@latest:
   version "2.0.0"
   resolved "https://registry.yarnpkg.com/auto-changelog/-/auto-changelog-2.0.0.tgz#bfae79668394e3fd3be90cb59c1abcdcf750f458"
   integrity sha512-A61Oc4A/5L5OlMs+AEQNgy8/sOn5Eu0I2Sw4+qbwk40y6kh+2wmptoY4b30FHlduPh3ghybB94eIVFKkAZtjzg==
