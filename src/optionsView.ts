@@ -39,21 +39,20 @@ class OptionsView {
       ),
     };
 
-    getParserVersions().then((versions) => {
-      this.viewers.version = this.registerView(
-        'babelAstExplorer-versions',
-        new SingleOptionProvider(
-          {
-            key: 'version',
-            items: versions.map((v) => ({
-              label: v,
-              value: v,
-            })),
-          },
-          versions[0]
-        )
-      );
-    });
+    const versions = getParserVersions();
+    this.viewers.version = this.registerView(
+      'babelAstExplorer-versions',
+      new SingleOptionProvider(
+        {
+          key: 'version',
+          items: versions.map((v) => ({
+            label: v,
+            value: v,
+          })),
+        },
+        versions[0]
+      )
+    );
   }
 
   registerView(

@@ -12,7 +12,7 @@ function getTemplate(templatename: string) {
   if (!templateCache[templatename]) {
     const raw = fs
       .readFileSync(
-        path.resolve(__dirname, '../resources/templates', templatename),
+        path.resolve(__ASSET_PATH__, 'templates', templatename),
         'utf-8'
       )
       .toString();
