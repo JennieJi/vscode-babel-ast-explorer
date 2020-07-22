@@ -159,19 +159,20 @@
           classList.add(classname);
         }
       }
-      window.option = function(value) {
+      window.option = function (value) {
         toggleClass(document.getElementById('page'), value);
       };
-      window.onload = function() {
+      window.onload = function () {
         var COLLAPSE_CLASS = 'collapse';
-        var els = document.querySelectorAll(
-          '.child-type-object>dt,.child-type-array>dt'
-        );
-        for (let el of els) {
-          el.addEventListener('click', function(e) {
-            toggleClass(e.target.parentElement.parentElement, COLLAPSE_CLASS);
-          });
-        }
+        document.getElementById('ast').addEventListener('click', function (e) {
+          const node = e.target.closest('dl');
+          if (
+            node.classList.contains('child-type-object') ||
+            node.classList.contains('child-type-array')
+          ) {
+            toggleClass(node, COLLAPSE_CLASS);
+          }
+        });
       };
     </script>
   </body>
