@@ -1,7 +1,6 @@
 on:
   schedule:
-    tags:
-      - cron: "* * 15 * *"
+    - cron: '0 13 15 * *'
 
 name: Scheduled update version
 jobs:
@@ -13,4 +12,7 @@ jobs:
         with:
           node-version: 12
       - name: pump version
-        run: npm version patch
+        run:
+          - git config user.name bot
+          - git config user.email jennie.ji@hotmail.com
+          - npm version patch
