@@ -1,0 +1,16 @@
+on:
+  schedule:
+    tags:
+      - cron: "* * 15 * *"
+
+name: Scheduled update version
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-node@v1
+        with:
+          node-version: 12
+      - name: pump version
+        run: npm version patch
