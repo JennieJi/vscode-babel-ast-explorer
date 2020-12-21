@@ -1,15 +1,14 @@
 import { Node } from '@babel/types';
 import simpleTemplate from './simpleTemplate';
-import { isNumber } from 'util';
 
 export default async function renderAst(ast: Node): Promise<string> {
   const ret = await Promise.all(
-    Object.entries(ast).map(async ([key, node]) => {
+    Object.entries(ast).map(async ([key, node]: [string, Node]) => {
       const isArrayNode =
-        node && typeof node === 'object' && isNumber(node.length);
+        node && typeof node === 'object' && (node as any).length === 'number';
       const isEmpty =
-        (!isNumber(node) && !node) ||
-        (isArrayNode && !node.length) ||
+        !node ||
+        (isArrayNode && !(node as any).length) ||
         (typeof node === 'object' && !Object.keys(node).length);
       let childType = typeof node as string;
       if (node === null) {
@@ -31,8 +30,8 @@ export default async function renderAst(ast: Node): Promise<string> {
         child,
         childType,
         line: '' + (node?.loc?.start.line || ''),
-        colStart: isNumber(node?.start) ? '' + node?.start : '',
-        colEnd: isNumber(node?.end) ? '' + node?.end : '',
+        colStart: typeof node?.start === 'number' ? '' + node?.start : '',
+        colEnd: typeof node?.end === 'number' ? '' + node?.end : '',
         class: isEmpty ? `empty` : '',
       });
     })

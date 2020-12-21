@@ -10,17 +10,21 @@ export function activate(context: vscode.ExtensionContext) {
   let optionsView: OptionsView | undefined;
   const defaultOptions = OPTIONS.map(({ value }) => value);
 
-  const guessedPlugins = guessPlugins(vscode.window.activeTextEditor);
-  if (!optionsView) {
-    optionsView = new OptionsView({
-      options: defaultOptions,
-      plugins: guessedPlugins,
-    });
-  }
   context.subscriptions.push(
     vscode.commands.registerCommand(COMMANDS.start, () => {
+      const plugins = guessPlugins(vscode.window.activeTextEditor);
+      if (optionsView) {
+        optionsView.update({
+          plugins,
+        });
+      } else {
+        optionsView = new OptionsView({
+          options: defaultOptions,
+          plugins,
+        });
+      }
       if (astView) {
-        astView.updateEditor();
+        astView.updateEditor({ plugins });
       } else {
         astView = new ASTView(
           () => {
@@ -30,7 +34,7 @@ export function activate(context: vscode.ExtensionContext) {
             }
             astView = undefined;
           },
-          { options: defaultOptions, plugins: guessedPlugins }
+          { options: defaultOptions, plugins }
         );
       }
     })

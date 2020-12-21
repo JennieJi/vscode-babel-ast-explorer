@@ -1,9 +1,10 @@
 {
   "compilerOptions": {
-    "module": "commonjs",
+    "module": "es2020",
     "target": "es6",
     "outDir": "out",
-    "lib": ["es6"],
+    "lib": ["ES6", "ESNext"],
+    "moduleResolution": "Node",
     "sourceMap": true,
     "rootDir": ".",
     "strict": true /* enable all strict type-checking options */,

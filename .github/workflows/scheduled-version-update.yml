@@ -13,6 +13,5 @@ jobs:
           node-version: 12
       - name: pump version
         run:
-          - git config user.name bot
-          - git config user.email jennie.ji@hotmail.com
           - npm version patch
+          - git push

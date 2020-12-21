@@ -31,6 +31,11 @@
         "title": "Open",
         "category": "Babel AST Explorer",
         "icon": "resources/icons/run.svg"
+      },
+      {
+        "command": "babelAstExplorer.update",
+        "title": "Update",
+        "category": "Babel AST Explorer"
       }
     ],
     "menus": {
@@ -85,13 +90,13 @@
     "test": "node ./out/test/runTest.js"
   },
   "devDependencies": {
-    "@babel/types": "^7.8.7",
+    "@babel/types": "^7.12.11",
     "@types/glob": "^7.1.1",
     "@types/mocha": "^7.0.2",
     "@types/node": "^12.11.7",
     "@types/pacote": "^11.1.0",
     "@types/semver": "^7.2.0",
-    "@types/vscode": "^1.42.0",
+    "@types/vscode": "^1.52.0",
     "@typescript-eslint/eslint-plugin": "^2.18.0",
     "@typescript-eslint/parser": "^2.18.0",
     "auto-changelog": "latest",
@@ -106,7 +111,8 @@
     "ts-loader": "^7.0.5",
     "ts-node": "^8.10.1",
     "typescript": "^3.7.5",
-    "vscode-test": "^1.3.0",
+    "vsce": "^1.83.0",
+    "vscode-test": "^1.4.1",
     "webpack": "^4.43.0",
     "webpack-cli": "^3.3.11"
   },
