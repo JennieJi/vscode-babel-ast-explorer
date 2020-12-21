@@ -1,14 +1,16 @@
 {
   "compilerOptions": {
-    "module": "es2020",
+    "module": "CommonJS",
     "target": "es6",
     "outDir": "out",
-    "lib": ["ES6", "ESNext"],
+    "lib": ["ES6", "ES2019", "ESNext"],
     "moduleResolution": "Node",
     "sourceMap": true,
     "rootDir": ".",
+    "baseUrl": ".",
     "strict": true /* enable all strict type-checking options */,
-    "resolveJsonModule": true
+    "resolveJsonModule": true,
+    "allowJs": true
     /* Additional Checks */
     // "noImplicitReturns": true, /* Report error when not all code paths in function return a value. */
     // "noFallthroughCasesInSwitch": true, /* Report errors for fallthrough cases in switch statement. */
