@@ -52,9 +52,9 @@ class ASTView {
     }, 10000);
   }
 
-  public updateEditor() {
+  public updateEditor(options?: ASTViewOptions) {
     this.editor = vscode.window.activeTextEditor;
-    this.update();
+    this.update(options);
   }
 
   private getTitle() {
