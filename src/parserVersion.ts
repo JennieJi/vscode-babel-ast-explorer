@@ -1,23 +1,24 @@
-import * as semver from 'semver';
 import * as path from 'path';
 import * as fs from 'fs';
 
-const PACKAGE = '@babel/parser';
-
-function parserPath(version = '') {
-  return path.resolve(__ASSET_PATH__, PACKAGE, version);
-}
-
 export function getParserVersions() {
-  return semver.rsort(fs.readdirSync(parserPath()));
+  return require('resources/@babel/parser/versions.json') as string[];
 }
 
-export async function resolveVersion(version?: string) {
+export function resolveVersion(version = '') {
   if (!version) {
-    version = getParserVersions()[0];
+    const versions = getParserVersions();
+    version = versions[0];
   }
-  const pkg = await import(
-    `${__ASSET_PATH__}/${PACKAGE}/${version}/package.json`
+  const packagePath = path.join(
+    __dirname,
+    '../resources/@babel/parser',
+    version
   );
-  return await import(`${__ASSET_PATH__}/${PACKAGE}/${version}/${pkg.main}`);
+  const pkg = JSON.parse(
+    fs.readFileSync(path.join(packagePath, 'package.json')).toString()
+  );
+  // HACK external source dynamic require cannot work well with ts and webpack
+  eval(fs.readFileSync(path.join(packagePath, pkg.main)).toString());
+  return exports;
 }

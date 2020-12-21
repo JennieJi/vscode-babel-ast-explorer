@@ -91,7 +91,7 @@ class ASTView {
       this.options || ({} as ASTViewOptions);
 
     try {
-      const { parse } = await resolveVersion(babelVersion);
+      const { parse } = resolveVersion(babelVersion);
       const ast = parse(raw, {
         sourceType,
         plugins,

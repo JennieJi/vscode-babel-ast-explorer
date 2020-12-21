@@ -27,14 +27,12 @@ class SingleOptionProvider implements vscode.TreeDataProvider<OptionNode> {
 
   public getTreeItem({ label, value }: OptionNode): vscode.TreeItem {
     const isEnabled = this.enabled === value;
-    const iconPath = path.resolve(
-      __ASSET_PATH__,
-      isEnabled ? 'icons/green-tick.svg' : 'icons/grey-tick.svg'
-    );
     return {
       label,
       id: value,
-      iconPath,
+      iconPath: isEnabled
+        ? new vscode.ThemeIcon('notebook-state-success')
+        : undefined,
       command: {
         command: COMMANDS.update,
         arguments: [

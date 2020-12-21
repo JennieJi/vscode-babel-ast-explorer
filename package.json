@@ -18,6 +18,7 @@
   ],
   "activationEvents": [
     "onCommand:babelAstExplorer.start",
+    "onCommand:babelAstExplorer.update",
     "onLanguage:typescript",
     "onLanguage:typescriptreact",
     "onLanguage:javascript",
@@ -30,7 +31,7 @@
         "command": "babelAstExplorer.start",
         "title": "Open",
         "category": "Babel AST Explorer",
-        "icon": "resources/icons/run.svg"
+        "icon": "$(triangle-right)"
       },
       {
         "command": "babelAstExplorer.update",
@@ -39,6 +40,15 @@
       }
     ],
     "menus": {
+      "commandPalette": [
+        {
+          "command": "babelAstExplorer.start"
+        },
+        {
+          "command": "babelAstExplorer.update",
+          "when": "false"
+        }
+      ],
       "view/title": [
         {
           "command": "babelAstExplorer.start",
@@ -107,6 +117,7 @@
     "mocha": "^7.1.0",
     "pacote": "^11.1.10",
     "prettier": "^2.0.5",
+    "semver": "^7.3.2",
     "shebang-loader": "^0.0.1",
     "ts-loader": "^7.0.5",
     "ts-node": "^8.10.1",
@@ -122,8 +133,5 @@
   },
   "bugs": {
     "url": "https://github.com/JennieJi/vscode-babel-ast-explorer/issues"
-  },
-  "dependencies": {
-    "semver": "^7.3.2"
   }
 }
