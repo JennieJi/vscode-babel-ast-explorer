@@ -18,6 +18,7 @@
   ],
   "activationEvents": [
     "onCommand:babelAstExplorer.start",
+    "onCommand:babelAstExplorer.update",
     "onLanguage:typescript",
     "onLanguage:typescriptreact",
     "onLanguage:javascript",
@@ -30,7 +31,7 @@
         "command": "babelAstExplorer.start",
         "title": "Open",
         "category": "Babel AST Explorer",
-        "icon": "resources/icons/run.svg"
+        "icon": "$(triangle-right)"
       },
       {
         "command": "babelAstExplorer.update",
@@ -39,6 +40,15 @@
       }
     ],
     "menus": {
+      "commandPalette": [
+        {
+          "command": "babelAstExplorer.start"
+        },
+        {
+          "command": "babelAstExplorer.update",
+          "when": "false"
+        }
+      ],
       "view/title": [
         {
           "command": "babelAstExplorer.start",
