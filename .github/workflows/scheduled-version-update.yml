@@ -12,6 +12,6 @@ jobs:
         with:
           node-version: 12
       - name: pump version
-        run:
-          - npm version patch
-          - git push
+        run: |
+          npm version patch
+          git push --follow-tags
