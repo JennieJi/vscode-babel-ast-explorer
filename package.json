@@ -8,7 +8,7 @@
     "name": "Jennie Ji",
     "email": "jennie.ji@hotmail.com"
   },
-  "version": "0.1.7",
+  "version": "0.1.8",
   "license": "MIT",
   "engines": {
     "vscode": "^1.42.0"
