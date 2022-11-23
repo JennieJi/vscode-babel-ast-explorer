@@ -5,11 +5,10 @@ import { OptionNode, OptionGroup } from './options';
 class MultiOptionsProvider implements vscode.TreeDataProvider<OptionNode> {
   private model: OptionGroup;
   private enabledOptions: any[];
-  private _onDidChangeTreeData: vscode.EventEmitter<
-    void
-  > = new vscode.EventEmitter<void>();
-  readonly onDidChangeTreeData: vscode.Event<any> = this._onDidChangeTreeData
-    .event;
+  private _onDidChangeTreeData: vscode.EventEmitter<void> =
+    new vscode.EventEmitter<void>();
+  readonly onDidChangeTreeData: vscode.Event<any> =
+    this._onDidChangeTreeData.event;
 
   constructor(optionGroup: OptionGroup, enabled?: any[]) {
     this.model = optionGroup;

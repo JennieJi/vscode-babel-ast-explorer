@@ -11,11 +11,10 @@ class SingleOptionProvider implements vscode.TreeDataProvider<OptionNode> {
   private key: string;
   private model: IOptionGroups;
   private enabled: any;
-  private _onDidChangeTreeData: vscode.EventEmitter<
-    void
-  > = new vscode.EventEmitter<void>();
-  readonly onDidChangeTreeData: vscode.Event<any> = this._onDidChangeTreeData
-    .event;
+  private _onDidChangeTreeData: vscode.EventEmitter<void> =
+    new vscode.EventEmitter<void>();
+  readonly onDidChangeTreeData: vscode.Event<any> =
+    this._onDidChangeTreeData.event;
 
   constructor(key: string, optionGroup: IOptionGroups, enabled?: any) {
     this.key = key;
