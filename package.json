@@ -116,6 +116,7 @@
     "glob": "^7.1.6",
     "mocha": "^7.1.0",
     "pacote": "^11.1.10",
+    "prettier": "^2.8.0",
     "semver": "^7.3.2",
     "shebang-loader": "^0.0.1",
     "ts-loader": "^7.0.5",
