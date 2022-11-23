@@ -87,8 +87,12 @@ class ASTView {
 
   private async getWebviewContent() {
     const raw = this.getContent();
-    const { babelVersion, sourceType, plugins, options = [] } =
-      this.options || ({} as ASTViewOptions);
+    const {
+      babelVersion,
+      sourceType,
+      plugins,
+      options = [],
+    } = this.options || ({} as ASTViewOptions);
 
     try {
       const { parse } = resolveVersion(babelVersion);

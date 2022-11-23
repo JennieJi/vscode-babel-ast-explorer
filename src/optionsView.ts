@@ -1,5 +1,11 @@
 import * as vscode from 'vscode';
-import { OptionNode, PLUGINS, OPTIONS } from './options';
+import {
+  OptionNode,
+  PLUGINS,
+  OPTIONS,
+  IOptionGroup,
+  IOptionGroups,
+} from './options';
 import { getParserVersions } from './parserVersion';
 import MultiOptionsProvider from './MultiOptionsProvider';
 import SingleOptionProvider from './SingleOptionProvider';
@@ -40,18 +46,34 @@ class OptionsView {
     };
 
     const versions = getParserVersions();
+    const versionOptions: IOptionGroups = {};
+    versions.forEach((v) =>
+      // @ts-ignore
+      v.split('.').reduce((obj, n, i, arr) => {
+        if (arr.length === i + 1) {
+          obj[n] = {
+            type: 'option',
+            // @ts-ignore
+            label: v,
+            // @ts-ignore
+            value: v,
+          };
+          return obj;
+        } else if (!obj[n]) {
+          const groupValue = arr.slice(0, i + 1).join('.');
+          obj[n] = {
+            type: 'group',
+            label: groupValue,
+            value: groupValue,
+            items: {},
+          };
+        }
+        return (obj[n] as IOptionGroup).items;
+      }, versionOptions)
+    );
     this.viewers.version = this.registerView(
       'babelAstExplorer-versions',
-      new SingleOptionProvider(
-        {
-          key: 'version',
-          items: versions.map((v) => ({
-            label: v,
-            value: v,
-          })),
-        },
-        versions[0]
-      )
+      new SingleOptionProvider('version', versionOptions, versions[0])
     );
   }
 
