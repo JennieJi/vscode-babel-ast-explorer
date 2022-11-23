@@ -1,10 +1,15 @@
 import * as vscode from 'vscode';
-import * as path from 'path';
 import { COMMANDS } from './commands';
-import { OptionNode, OptionGroup } from './options';
+import {
+  OptionNode,
+  IOptionGroups,
+  IOptionGroup,
+  IOptionItem,
+} from './options';
 
 class SingleOptionProvider implements vscode.TreeDataProvider<OptionNode> {
-  private model: OptionGroup;
+  private key: string;
+  private model: IOptionGroups;
   private enabled: any;
   private _onDidChangeTreeData: vscode.EventEmitter<
     void
@@ -12,7 +17,8 @@ class SingleOptionProvider implements vscode.TreeDataProvider<OptionNode> {
   readonly onDidChangeTreeData: vscode.Event<any> = this._onDidChangeTreeData
     .event;
 
-  constructor(optionGroup: OptionGroup, enabled?: any) {
+  constructor(key: string, optionGroup: IOptionGroups, enabled?: any) {
+    this.key = key;
     this.model = optionGroup;
     this.enabled = enabled;
   }
@@ -25,8 +31,16 @@ class SingleOptionProvider implements vscode.TreeDataProvider<OptionNode> {
     return this.enabled;
   }
 
-  public getTreeItem({ label, value }: OptionNode): vscode.TreeItem {
-    const isEnabled = this.enabled === value;
+  public getTreeItem(item: IOptionGroup | IOptionItem): vscode.TreeItem {
+    const { type, label, value } = item;
+    const isEnabled = this.enabled.startsWith(value);
+    if (type === 'group') {
+      return {
+        label,
+        id: value,
+        collapsibleState: isEnabled + 1,
+      };
+    }
     return {
       label,
       id: value,
@@ -37,7 +51,7 @@ class SingleOptionProvider implements vscode.TreeDataProvider<OptionNode> {
         command: COMMANDS.update,
         arguments: [
           {
-            [this.model.key]: value,
+            [this.key]: value,
           },
         ],
         title: `Toggle ${label} option`,
@@ -45,8 +59,13 @@ class SingleOptionProvider implements vscode.TreeDataProvider<OptionNode> {
     };
   }
 
-  public getChildren(): OptionNode[] | Thenable<OptionNode[]> {
-    return this.model.items;
+  public getChildren(
+    el: IOptionGroup | undefined
+  ): (IOptionGroup | IOptionItem)[] {
+    const items = el ? el.items : this.model;
+    return Object.keys(items)
+      .sort((a, b) => parseInt(b, 10) - parseInt(a, 10))
+      .map((key) => items[key]);
   }
 }
 

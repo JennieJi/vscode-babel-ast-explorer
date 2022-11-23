@@ -6,6 +6,20 @@ export type OptionGroup = {
   key: string;
   items: OptionNode[];
 };
+export interface IOptionItem {
+  type: 'option';
+  label: string;
+  value: string;
+}
+export interface IOptionGroup {
+  type: 'group';
+  label: string;
+  value: string;
+  items: IOptionGroups;
+}
+export interface IOptionGroups {
+  [key: string]: IOptionGroup | IOptionItem;
+}
 
 export const OPTIONS = [
   {

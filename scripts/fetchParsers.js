@@ -2,29 +2,36 @@ const { packument, extract } = require('pacote');
 const semver = require('semver');
 const path = require('path');
 const fs = require('fs');
+const { promisify } = require('util');
 
 const PACKAGE = '@babel/parser';
 
 const packagePath = path.resolve(__dirname, '../resources', PACKAGE);
-
-async function getParserVersions() {
-  const data = await packument(PACKAGE);
-  return semver.rsort(Object.values(data.versions).map((d) => d.version));
+if (!fs.existsSync(packagePath)) {
+  fs.mkdirSync(packagePath, { recursive: true });
 }
 
 function resolveVersion(version = 'latest') {
   const spec = `${PACKAGE}@${version}`;
   const dist = path.join(packagePath, version);
-  return extract(spec, dist).then((res) => {
-    console.log(`fetched ${spec} -> ${dist}`);
-    return res;
+  return promisify(fs.exists)(dist).then((exists) => {
+    if (!exists) {
+      return extract(spec, dist).then((res) => {
+        console.log(`fetched ${spec} -> ${dist}`);
+        return res;
+      });
+    }
   });
 }
 
-getParserVersions().then((versions) => {
-  fs.writeFileSync(
-    path.join(packagePath, 'versions.json'),
-    JSON.stringify(versions)
+packument(PACKAGE).then(({ versions }) => {
+  const versionsSorted = semver.rsort(
+    Object.values(versions).map((d) => d.version)
   );
-  return Promise.all(versions.map(resolveVersion));
+  return fs.promises
+    .writeFile(
+      path.join(packagePath, 'versions.json'),
+      JSON.stringify(versionsSorted)
+    )
+    .finally(() => Promise.all(versionsSorted.map(resolveVersion)));
 });
