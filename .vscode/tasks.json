@@ -6,8 +6,7 @@
     {
       "type": "npm",
       "label": "Build",
-      "script": "dev",
-      "problemMatcher": "$tsc-watch",
+      "script": "compile",
       "isBackground": true,
       "presentation": {
         "reveal": "always"
