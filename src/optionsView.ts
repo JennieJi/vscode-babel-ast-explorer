@@ -6,9 +6,52 @@ import {
   IOptionGroup,
   IOptionGroups,
 } from './options';
-import { getParserVersions } from './parserVersion';
+import fetch from 'node-fetch';
 import MultiOptionsProvider from './MultiOptionsProvider';
 import SingleOptionProvider from './SingleOptionProvider';
+
+
+
+function getVersions(): Promise<string[]> {
+  return fetch('https://api.github.com/repos/babel/babel/tags').then(res => {
+    if (res.ok) {
+      return res.json();
+    }
+    throw `${res.status} ${res.statusText}`;
+  }).then((res) => (res as { name: string }[]).map(tag => tag.name)).catch(e => {
+    // TODO: find a better way to handle error
+    console.error(e.toString());
+    return [];
+  });
+}
+function parseVersionOptions(versions: string[]) {
+  const versionOptions: IOptionGroups = {};
+  versions.forEach((v) =>
+    // @ts-ignore
+    v.split('.').reduce((obj, n, i, arr) => {
+      if (arr.length === i + 1) {
+        obj[n] = {
+          type: 'option',
+          // @ts-ignore
+          label: v,
+          // @ts-ignore
+          value: v,
+        };
+        return obj;
+      } else if (!obj[n]) {
+        const groupValue = arr.slice(0, i + 1).join('.');
+        obj[n] = {
+          type: 'group',
+          label: groupValue,
+          value: groupValue,
+          items: {},
+        };
+      }
+      return (obj[n] as IOptionGroup).items;
+    }, versionOptions)
+  );
+  return versionOptions;
+}
 
 class OptionsView {
   private viewers: {
@@ -45,36 +88,21 @@ class OptionsView {
       ),
     };
 
-    const versions = getParserVersions();
-    const versionOptions: IOptionGroups = {};
-    versions.forEach((v) =>
-      // @ts-ignore
-      v.split('.').reduce((obj, n, i, arr) => {
-        if (arr.length === i + 1) {
-          obj[n] = {
-            type: 'option',
-            // @ts-ignore
-            label: v,
-            // @ts-ignore
-            value: v,
-          };
-          return obj;
-        } else if (!obj[n]) {
-          const groupValue = arr.slice(0, i + 1).join('.');
-          obj[n] = {
-            type: 'group',
-            label: groupValue,
-            value: groupValue,
-            items: {},
-          };
-        }
-        return (obj[n] as IOptionGroup).items;
-      }, versionOptions)
-    );
+    const defaultOptions: IOptionGroups = {
+      latest: {
+        type: 'option',
+        label: 'latest',
+        value: 'latest'
+      }
+    };
     this.viewers.version = this.registerView(
       'babelAstExplorer-versions',
-      new SingleOptionProvider('version', versionOptions, versions[0])
+      new SingleOptionProvider('version', defaultOptions, 'latest')
     );
+    getVersions().then(parseVersionOptions).then(options => this.update({
+      ...defaultOptions,
+      ...options
+    }));
   }
 
   registerView(

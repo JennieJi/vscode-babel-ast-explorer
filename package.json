@@ -92,7 +92,7 @@
     "vscode:prepublish": "yarn fetch:parser && yarn changelog && yarn run compile",
     "changelog": "auto-changelog && git add CHANGELOG.md",
     "fetch:parser": "node ./scripts/fetchParsers.js",
-    "compile": "rollup -c",
+    "compile": "rm -rf out && rollup -c",
     "lint": "eslint src --ext ts",
     "watch": "tsc -watch -p ./",
     "pretest": "yarn run compile && yarn run lint",

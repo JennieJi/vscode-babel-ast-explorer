@@ -32,7 +32,7 @@ class SingleOptionProvider implements vscode.TreeDataProvider<OptionNode> {
 
   public getTreeItem(item: IOptionGroup | IOptionItem): vscode.TreeItem {
     const { type, label, value } = item;
-    const isEnabled = this.enabled.startsWith(value);
+    const isEnabled = this.enabled === value || this.enabled.startsWith(value + '.');
     if (type === 'group') {
       return {
         label,
