@@ -4,7 +4,8 @@ import {
   PLUGINS,
   OPTIONS,
   IOptionGroup,
-  IOptionGroups,
+  IOptionItem,
+  OptionGroups,
 } from './options';
 import fetch from 'node-fetch';
 import MultiOptionsProvider from './MultiOptionsProvider';
@@ -12,118 +13,126 @@ import SingleOptionProvider from './SingleOptionProvider';
 
 
 
-function getVersions(): Promise<string[]> {
-  return fetch('https://api.github.com/repos/babel/babel/tags').then(res => {
+function fetchJson(url: string) {
+  return fetch(url).then(res => {
     if (res.ok) {
       return res.json();
     }
     throw `${res.status} ${res.statusText}`;
-  }).then((res) => (res as { name: string }[]).map(tag => tag.name)).catch(e => {
+  })
+}
+
+const VERSION_LIMIT = 100;
+const defaultVersionOption: IOptionItem = {
+  type: 'option',
+  label: 'latest',
+  value: 'latest'
+};
+function getVersions(page = 1): Promise<string[]> {
+  const url = `https://api.github.com/repos/babel/babel/tags?per_page=${VERSION_LIMIT}&page=${page}`;
+  return fetchJson(url).then((res) => (res as { name: string }[]).map(tag => tag.name)).catch(e => {
     // TODO: find a better way to handle error
     console.error(e.toString());
     return [];
   });
 }
 function parseVersionOptions(versions: string[]) {
-  const versionOptions: IOptionGroups = {};
-  versions.forEach((v) =>
+  const versionOptions: OptionGroups = [];
+  versions.forEach((v) => {
     // @ts-ignore
-    v.split('.').reduce((obj, n, i, arr) => {
-      if (arr.length === i + 1) {
-        obj[n] = {
-          type: 'option',
-          // @ts-ignore
-          label: v,
-          // @ts-ignore
-          value: v,
-        };
-        return obj;
-      } else if (!obj[n]) {
-        const groupValue = arr.slice(0, i + 1).join('.');
-        obj[n] = {
-          type: 'group',
-          label: groupValue,
-          value: groupValue,
-          items: {},
-        };
-      }
-      return (obj[n] as IOptionGroup).items;
-    }, versionOptions)
-  );
+    const [major, minor] = v.split('.');
+    const groupValue = [major, minor].join('.');
+    let last = versionOptions[versionOptions.length - 1];
+    if (last?.label !== groupValue) {
+      last = {
+        type: 'group',
+        label: groupValue,
+        value: groupValue + '.',
+        items: [],
+      };
+      versionOptions.push(last);
+    }
+    (last as IOptionGroup).items.push({
+      type: 'option',
+      label: v,
+      value: v,
+    });
+  });
   return versionOptions;
 }
 
 class OptionsView {
   private viewers: {
-    [id: string]: {
+    plugins?: {
       view: vscode.TreeView<OptionNode>;
-      dataProvider: MultiOptionsProvider | SingleOptionProvider;
+      dataProvider: MultiOptionsProvider;
     };
-  };
+    options?: {
+      view: vscode.TreeView<OptionNode>;
+      dataProvider: MultiOptionsProvider;
+    };
+    version?: {
+      view: vscode.TreeView<OptionNode>;
+      dataProvider: SingleOptionProvider;
+    };
+  } = {};
 
   constructor(initialVals = {} as { [key: string]: any }) {
-    this.viewers = {
-      plugins: this.registerView(
-        'babelAstExplorer-plugins',
-        new MultiOptionsProvider(
-          {
-            key: 'plugins',
-            items: PLUGINS.map((plugin) => ({
-              label: plugin as string,
-              value: plugin,
-            })),
-          },
-          initialVals.plugins
-        )
-      ),
-      options: this.registerView(
-        'babelAstExplorer-options',
-        new MultiOptionsProvider(
-          {
-            key: 'options',
-            items: OPTIONS,
-          },
-          initialVals.options
-        )
-      ),
-    };
-
-    const defaultOptions: IOptionGroups = {
-      latest: {
-        type: 'option',
-        label: 'latest',
-        value: 'latest'
-      }
-    };
-    this.viewers.version = this.registerView(
-      'babelAstExplorer-versions',
-      new SingleOptionProvider('version', defaultOptions, 'latest')
+    this.registerView(
+      'plugins',
+      new MultiOptionsProvider(
+        'plugins',
+        PLUGINS.map((plugin) => ({
+          label: plugin as string,
+          value: plugin,
+        })),
+        initialVals.plugins
+      )
     );
-    getVersions().then(parseVersionOptions).then(options => this.update({
-      ...defaultOptions,
-      ...options
-    }));
+    this.registerView(
+      'options',
+      new MultiOptionsProvider(
+        'options',
+        OPTIONS,
+        initialVals.options
+      )
+    );
+
+    this.registerView(
+      'version',
+      new SingleOptionProvider('version', [defaultVersionOption], defaultVersionOption.value)
+    );
+    this.loadVersions();
+  }
+
+  async loadVersions() {
+    let loadedVersions: string[] = [];
+    for (let p = 1; p < 5; p++) {
+      const versions = await getVersions(p);
+      loadedVersions = loadedVersions.concat(versions);
+      this.viewers.version?.dataProvider.update([
+        defaultVersionOption,
+        ...parseVersionOptions(loadedVersions)
+      ]);
+    }
   }
 
   registerView(
-    id: string,
+    id: keyof OptionsView['viewers'],
     dataProvider: MultiOptionsProvider | SingleOptionProvider
   ) {
-    return {
-      view: vscode.window.createTreeView(id, {
+    this.viewers[id] = {
+      view: vscode.window.createTreeView(`babelAstExplorer-${id}`, {
         treeDataProvider: dataProvider,
       }),
+      // @ts-ignore
       dataProvider,
     };
   }
 
   update(options: { [key: string]: any }) {
-    Object.keys(options).forEach((key) => {
-      const viewer = this.viewers[key];
-      if (viewer) {
-        viewer.dataProvider.setValue(options[key]);
-      }
-    });
+    // @ts-ignore
+    Object.keys(options).forEach((key) => this.viewers[key]?.dataProvider.setValue(options[key]));
   }
 
   dispose() {

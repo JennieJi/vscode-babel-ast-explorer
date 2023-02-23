@@ -9,7 +9,10 @@ module.exports = {
   input: 'src/extension.ts',
   output: {
     dir: 'out',
-    format: 'cjs'
+    format: 'cjs',
+    sourcemap: true,
+    chunkFileNames: '[name].js',
+    inlineDynamicImports: true
   },
   plugins: [typescript(), commonjs(), resolve()]
 };

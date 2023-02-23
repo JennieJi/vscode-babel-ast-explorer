@@ -68,7 +68,7 @@
           "name": "Options"
         },
         {
-          "id": "babelAstExplorer-versions",
+          "id": "babelAstExplorer-version",
           "name": "Babel Version"
         }
       ]
@@ -99,7 +99,8 @@
     "test": "node ./out/test/runTest.js"
   },
   "devDependencies": {
-    "@babel/types": "^7.12.11",
+    "@babel/parser": "^7.21.2",
+    "@babel/types": "^7.21.0",
     "@rollup/plugin-commonjs": "^24.0.1",
     "@rollup/plugin-node-resolve": "^15.0.1",
     "@rollup/plugin-typescript": "^11.0.0",

@@ -1,8 +1,9 @@
+import { ParserOptions } from '@babel/parser';
 import * as vscode from 'vscode';
 
 export default function guessPlugins(
   editor: vscode.TextEditor | undefined
-): string[] {
+): ParserOptions['plugins'] {
   const lang = editor?.document.languageId;
   if (lang === 'javascriptreact') {
     return ['jsx'];

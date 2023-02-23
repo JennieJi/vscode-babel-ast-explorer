@@ -1,17 +1,19 @@
 import * as vscode from 'vscode';
 import { COMMANDS } from './commands';
-import { OptionNode, OptionGroup } from './options';
+import { OptionNode } from './options';
 
 class MultiOptionsProvider implements vscode.TreeDataProvider<OptionNode> {
-  private model: OptionGroup;
+  private key: string;
+  private options: OptionNode[];
   private enabledOptions: any[];
   private _onDidChangeTreeData: vscode.EventEmitter<void> =
     new vscode.EventEmitter<void>();
   readonly onDidChangeTreeData: vscode.Event<any> =
     this._onDidChangeTreeData.event;
 
-  constructor(optionGroup: OptionGroup, enabled?: any[]) {
-    this.model = optionGroup;
+  constructor(key: string, options: OptionNode[], enabled?: any[]) {
+    this.key = key;
+    this.options = options;
     this.enabledOptions = enabled || [];
   }
 
@@ -24,6 +26,11 @@ class MultiOptionsProvider implements vscode.TreeDataProvider<OptionNode> {
       return;
     }
     this.enabledOptions = value;
+    this._onDidChangeTreeData.fire();
+  }
+
+  public update(options: OptionNode[]) {
+    this.options = options;
     this._onDidChangeTreeData.fire();
   }
 
@@ -40,7 +47,7 @@ class MultiOptionsProvider implements vscode.TreeDataProvider<OptionNode> {
         command: COMMANDS.update,
         arguments: [
           {
-            [this.model.key]: isEnabled
+            [this.key]: isEnabled
               ? enabled.filter((opt) => opt !== value)
               : [...enabled, value],
           },
@@ -51,7 +58,7 @@ class MultiOptionsProvider implements vscode.TreeDataProvider<OptionNode> {
   }
 
   public getChildren(): OptionNode[] | Thenable<OptionNode[]> {
-    return this.model.items;
+    return this.options;
   }
 }
 

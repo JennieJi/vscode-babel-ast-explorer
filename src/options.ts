@@ -2,10 +2,6 @@ export type OptionNode = {
   label: string;
   value: any;
 };
-export type OptionGroup = {
-  key: string;
-  items: OptionNode[];
-};
 export interface IOptionItem {
   type: 'option';
   label: string;
@@ -15,11 +11,9 @@ export interface IOptionGroup {
   type: 'group';
   label: string;
   value: string;
-  items: IOptionGroups;
+  items: OptionGroups;
 }
-export interface IOptionGroups {
-  [key: string]: IOptionGroup | IOptionItem;
-}
+export type OptionGroups = (IOptionGroup | IOptionItem)[]
 
 export const OPTIONS = [
   {
@@ -38,21 +32,42 @@ export const OPTIONS = [
 export const PLUGINS: string[] = [
   'jsx',
   'flow',
+  'flowComments',
   'typescript',
+  'v8intrinsic',
+  'asyncDoExpressions',
+  'decimal',
+  'decorators',
+  'decoratorAutoAccessors',
+  'destructuringPrivate',
+  'doExpressions',
+  'explicitResourceManagement',
+  'exportDefaultFrom',
+  'functionBind',
+  'functionSent',
+  'importAssertions',
+  'importReflection',
+  'moduleBlocks',
+  'partialApplication',
+  'pipelineOperator',
+  'recordAndTuple',
+  'regexpUnicodeSets',
+  'throwExpressions',
+  'asyncGenerators',
   'bigInt',
   'classProperties',
   'classPrivateProperties',
   'classPrivateMethods',
-  'decorators',
-  'doExpressions',
+  'classStaticBlock',
   'dynamicImport',
-  'exportDefaultFrom',
+  'exportNamespaceFrom',
+  'logicalAssignment',
+  'moduleStringNames',
   'nullishCoalescingOperator',
   'numericSeparator',
   'objectRestSpread',
   'optionalChaining',
   'optionalCatchBinding',
-  'partialApplication',
-  'pipelineOperator',
-  'throwExpressions',
+  'privateIn',
+  'topLevelAwait'
 ];

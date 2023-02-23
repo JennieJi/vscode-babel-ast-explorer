@@ -1,13 +1,14 @@
 import * as vscode from 'vscode';
+import { ParserOptions } from '@babel/parser';
+import { resolveVersion } from './parserVersion';
 import renderAst from './renderAst';
 import simpleTemplate from './simpleTemplate';
-import { resolveVersion } from './parserVersion';
 
 export type ASTViewOptions = {
-  babelVersion?: string;
+  version?: string;
   options?: string[];
-  plugins?: string[];
-  sourceType?: string;
+  plugins?: ParserOptions['plugins'];
+  sourceType?: ParserOptions['sourceType'];
 };
 
 class ASTView {
@@ -52,9 +53,8 @@ class ASTView {
     }, 10000);
   }
 
-  public updateEditor(options?: ASTViewOptions) {
+  public updateEditor() {
     this.editor = vscode.window.activeTextEditor;
-    this.update(options);
   }
 
   private getTitle() {
@@ -88,14 +88,14 @@ class ASTView {
   private async getWebviewContent() {
     const raw = this.getContent();
     const {
-      babelVersion,
+      version,
       sourceType,
       plugins,
       options = [],
     } = this.options || ({} as ASTViewOptions);
 
     try {
-      const { parse } = resolveVersion(babelVersion);
+      const { parse } = await resolveVersion(version);
       const ast = parse(raw, {
         sourceType,
         plugins,
@@ -105,7 +105,7 @@ class ASTView {
         class: options.join(' '),
       });
     } catch (e) {
-      return e.message;
+      return (e as Error).message;
     }
   }
 }

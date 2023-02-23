@@ -14,9 +14,7 @@ export function activate(context: vscode.ExtensionContext) {
     vscode.commands.registerCommand(COMMANDS.start, () => {
       const plugins = guessPlugins(vscode.window.activeTextEditor);
       if (optionsView) {
-        optionsView.update({
-          plugins,
-        });
+        optionsView.update({ plugins })
       } else {
         optionsView = new OptionsView({
           options: defaultOptions,
@@ -24,7 +22,8 @@ export function activate(context: vscode.ExtensionContext) {
         });
       }
       if (astView) {
-        astView.updateEditor({ plugins });
+        astView.updateEditor();
+        astView.update({ plugins });
       } else {
         astView = new ASTView(
           () => {
@@ -43,6 +42,7 @@ export function activate(context: vscode.ExtensionContext) {
     vscode.commands.registerCommand(
       COMMANDS.update,
       (options: ASTViewOptions) => {
+
         if (astView) {
           astView.update(options);
         }
@@ -54,4 +54,4 @@ export function activate(context: vscode.ExtensionContext) {
   );
 }
 
-export function deactivate() {}
+export function deactivate() { }
