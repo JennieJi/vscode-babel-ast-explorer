@@ -37,18 +37,17 @@ class SingleOptionProvider implements vscode.TreeDataProvider<OptionNode> {
 
   public getTreeItem(item: IOptionGroup | IOptionItem): vscode.TreeItem {
     const { type, label, value } = item;
-    const isEnabled = this.enabled === value || this.enabled.startsWith(value);
     if (type === 'group') {
       return {
         label,
         id: value,
-        collapsibleState: isEnabled + 1,
+        collapsibleState: this.enabled.startsWith(value) + 1,
       };
     }
     return {
       label,
       id: value,
-      iconPath: isEnabled
+      iconPath: this.enabled === value
         ? new vscode.ThemeIcon('notebook-state-success')
         : undefined,
       command: {
