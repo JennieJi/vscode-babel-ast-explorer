@@ -89,9 +89,8 @@
     "startingVersion": "v0.1.0"
   },
   "scripts": {
-    "vscode:prepublish": "yarn fetch:parser && yarn changelog && yarn run compile",
+    "vscode:prepublish": "yarn changelog && yarn run compile",
     "changelog": "auto-changelog && git add CHANGELOG.md",
-    "fetch:parser": "node ./scripts/fetchParsers.js",
     "compile": "rm -rf out && rollup -c",
     "lint": "eslint src --ext ts",
     "watch": "tsc -watch -p ./",
