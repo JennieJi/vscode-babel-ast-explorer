@@ -104,6 +104,7 @@
     "@rollup/plugin-node-resolve": "^15.0.1",
     "@rollup/plugin-typescript": "^11.0.0",
     "@types/glob": "^7.1.1",
+    "@types/lodash.debounce": "^4.0.7",
     "@types/mocha": "^7.0.2",
     "@types/node": "^12.11.7",
     "@types/pacote": "^11.1.0",
@@ -134,6 +135,7 @@
     "url": "https://github.com/JennieJi/vscode-babel-ast-explorer/issues"
   },
   "dependencies": {
+    "lodash.debounce": "^4.0.8",
     "node-fetch": "^3.3.0"
   }
 }

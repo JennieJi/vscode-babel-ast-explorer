@@ -1,5 +1,6 @@
 import * as vscode from 'vscode';
 import { ParserOptions } from '@babel/parser';
+import debounce from 'lodash.debounce';
 import { resolveVersion } from './parserVersion';
 import renderAst from './renderAst';
 import simpleTemplate from './simpleTemplate';
@@ -14,8 +15,7 @@ export type ASTViewOptions = {
 class ASTView {
   private panel: vscode.WebviewPanel;
   private editor: vscode.TextEditor | undefined;
-  private codeVersion: number | undefined;
-  private updateTimer?: NodeJS.Timeout;
+  private debouncedUpdatePanel: (options?: ASTViewOptions) => void;
 
   private options = {
     sourceType: 'module',
@@ -23,7 +23,6 @@ class ASTView {
 
   constructor(onDispose?: () => void, options?: ASTViewOptions) {
     this.editor = vscode.window.activeTextEditor;
-    const sourcePath = this.editor?.document.uri;
     this.panel = vscode.window.createWebviewPanel(
       'babelAstExplorer',
       this.getTitle(),
@@ -32,25 +31,24 @@ class ASTView {
         enableScripts: true,
       }
     );
+    this.debouncedUpdatePanel = debounce(this.updatePanel, 500);
     if (onDispose) {
       this.panel.onDidDispose(onDispose);
     }
     this.update(options);
+    const textEditorWatcher = vscode.window.onDidChangeTextEditorSelection(() => this.update());
+    this.panel.onDidDispose(() => {
+      textEditorWatcher.dispose();
+      if (onDispose) {
+        onDispose();
+      }
+    });
   }
-
   public update(options?: ASTViewOptions) {
     if (options) {
       this.options = { ...this.options, ...options };
     }
-    if (this.updateTimer) {
-      clearTimeout(this.updateTimer);
-    }
-    this.updatePanel();
-    this.updateTimer = setTimeout(() => {
-      if (this.getVersion() !== this.codeVersion) {
-        this.updatePanel();
-      }
-    }, 10000);
+    this.debouncedUpdatePanel();
   }
 
   public updateEditor() {
@@ -69,14 +67,10 @@ class ASTView {
   private getContent() {
     return this.editor?.document.getText() || '';
   }
-  private getVersion() {
-    return this.editor?.document.version;
-  }
 
   private async updatePanel() {
     this.panel.title = this.getTitle();
     this.panel.webview.html = 'Loading...';
-    this.codeVersion = this.getVersion();
     const content = await this.getWebviewContent();
     if (content) {
       this.panel.webview.html = content;
@@ -100,9 +94,16 @@ class ASTView {
         sourceType,
         plugins,
       });
+      const lines = new Set<number>();
+      this.editor?.selections.forEach(selection => {
+        for (let n = selection.start.line; n <= selection.end.line; n++) {
+          lines.add(n + 1);
+        }
+      });
       return simpleTemplate('index.html', {
         ast: await renderAst(ast),
         class: options.join(' '),
+        style: Array.from(lines).map(l => `.line-${l}`).join(',') + '{ background: lightyellow; }'
       });
     } catch (e) {
       return (e as Error).message;
