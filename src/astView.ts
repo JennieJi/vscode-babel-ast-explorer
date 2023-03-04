@@ -12,6 +12,11 @@ export type ASTViewOptions = {
   sourceType?: ParserOptions['sourceType'];
 };
 
+enum ACTION {
+  SET_OPTIONS = 'SET_OPTIONS',
+  HIGHLIGHT = 'HIGHLIGHT',
+}
+
 class ASTView {
   private panel: vscode.WebviewPanel;
   private editor: vscode.TextEditor | undefined;
@@ -21,8 +26,12 @@ class ASTView {
     sourceType: 'module',
   } as ASTViewOptions;
 
-  constructor(onDispose?: () => void, options?: ASTViewOptions) {
+  constructor(onDispose?: () => void, options: ASTViewOptions = {}) {
     this.editor = vscode.window.activeTextEditor;
+    this.options = {
+      ...this.options,
+      ...options
+    };
     this.panel = vscode.window.createWebviewPanel(
       'babelAstExplorer',
       this.getTitle(),
@@ -31,12 +40,10 @@ class ASTView {
         enableScripts: true,
       }
     );
-    this.debouncedUpdatePanel = debounce(this.updatePanel, 500);
-    if (onDispose) {
-      this.panel.onDidDispose(onDispose);
-    }
-    this.update(options);
-    const textEditorWatcher = vscode.window.onDidChangeTextEditorSelection(() => this.update());
+    this.debouncedUpdatePanel = debounce(() => this.updatePanel(), 500);
+    this.updatePanel()
+    const textEditorWatcher = vscode.window.onDidChangeTextEditorSelection(() => this.highlightSelected());
+
     this.panel.onDidDispose(() => {
       textEditorWatcher.dispose();
       if (onDispose) {
@@ -44,15 +51,38 @@ class ASTView {
       }
     });
   }
+
   public update(options?: ASTViewOptions) {
     if (options) {
       this.options = { ...this.options, ...options };
     }
     this.debouncedUpdatePanel();
   }
+  public updateOptions(options: ASTViewOptions) {
+    if (
+      options.version !== this.options.version ||
+      options.sourceType !== this.options.sourceType ||
+      options.plugins?.toString() !== this.options.plugins?.toString()
+    ) {
+      return this.update(options);
+    }
+    if (options.options?.toString() !== this.options.options?.toString()) {
+      this.options = {
+        ...this.options,
+        options: options.options
+      };
+      this.panel.webview.postMessage([ACTION.SET_OPTIONS, options.options]);
+    }
+  }
 
-  public updateEditor() {
-    this.editor = vscode.window.activeTextEditor;
+  private highlightSelected() {
+    const lines = new Set<number>();
+    this.editor?.selections.forEach(selection => {
+      for (let n = selection.start.line; n <= selection.end.line; n++) {
+        lines.add(n + 1);
+      }
+    });
+    this.panel.webview.postMessage([ACTION.HIGHLIGHT, Array.from(lines)]);
   }
 
   private getTitle() {
@@ -64,23 +94,16 @@ class ASTView {
     }
   }
 
-  private getContent() {
-    return this.editor?.document.getText() || '';
-  }
-
   private async updatePanel() {
+    this.editor = vscode.window.activeTextEditor;
     this.panel.title = this.getTitle();
     this.panel.webview.html = 'Loading...';
     const content = await this.getWebviewContent();
-    if (content) {
-      this.panel.webview.html = content;
-    } else {
-      this.panel.webview.html = 'Error: empty content';
-    }
+    this.panel.webview.html = content ?? 'Error: empty content';
   }
 
   private async getWebviewContent() {
-    const raw = this.getContent();
+    const raw = this.editor?.document.getText() || '';
     const {
       version,
       sourceType,
@@ -94,16 +117,10 @@ class ASTView {
         sourceType,
         plugins,
       });
-      const lines = new Set<number>();
-      this.editor?.selections.forEach(selection => {
-        for (let n = selection.start.line; n <= selection.end.line; n++) {
-          lines.add(n + 1);
-        }
-      });
+
       return simpleTemplate('index.html', {
         ast: await renderAst(ast),
-        class: options.join(' '),
-        style: Array.from(lines).map(l => `.line-${l}`).join(',') + '{ background: lightyellow; }'
+        class: options.join(' ')
       });
     } catch (e) {
       return (e as Error).message;

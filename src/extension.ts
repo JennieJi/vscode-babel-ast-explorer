@@ -22,7 +22,6 @@ export function activate(context: vscode.ExtensionContext) {
         });
       }
       if (astView) {
-        astView.updateEditor();
         astView.update({ plugins });
       } else {
         astView = new ASTView(
@@ -44,7 +43,7 @@ export function activate(context: vscode.ExtensionContext) {
       (options: ASTViewOptions) => {
 
         if (astView) {
-          astView.update(options);
+          astView.updateOptions(options);
         }
         if (optionsView) {
           optionsView.update(options);

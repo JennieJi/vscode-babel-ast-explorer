@@ -29,7 +29,7 @@ export default async function renderAst(ast: Node): Promise<string> {
         type: node?.type || '',
         child,
         childType,
-        line: '' + (node?.loc?.start.line || ''),
+        line: node?.type === 'Program' ? '' : node?.loc?.start.line.toString() ?? '',
         colStart: typeof node?.start === 'number' ? '' + node?.start : '',
         colEnd: typeof node?.end === 'number' ? '' + node?.end : '',
         class: isEmpty ? `empty` : '',
