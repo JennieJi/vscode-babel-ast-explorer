@@ -7,30 +7,21 @@ import guessPlugins from './guessPlugins';
 
 export function activate(context: vscode.ExtensionContext) {
   let astView: ASTView | undefined;
-  let optionsView: OptionsView | undefined;
   const defaultOptions = OPTIONS.map(({ value }) => value);
+  const optionsView = new OptionsView({
+    options: defaultOptions
+  });
 
   context.subscriptions.push(
     vscode.commands.registerCommand(COMMANDS.start, () => {
       const plugins = guessPlugins(vscode.window.activeTextEditor);
-      if (optionsView) {
-        optionsView.update({ plugins })
-      } else {
-        optionsView = new OptionsView({
-          options: defaultOptions,
-          plugins,
-        });
-      }
+      optionsView.update({ plugins });
       if (astView) {
         astView.update({ plugins });
       } else {
         astView = new ASTView(
           () => {
-            if (optionsView) {
-              optionsView.dispose();
-              optionsView = undefined;
-            }
-            astView = undefined;
+            optionsView.dispose();
           },
           { options: defaultOptions, plugins }
         );
@@ -41,12 +32,9 @@ export function activate(context: vscode.ExtensionContext) {
     vscode.commands.registerCommand(
       COMMANDS.update,
       (options: ASTViewOptions) => {
-
+        optionsView.update(options);
         if (astView) {
-          astView.updateOptions(options);
-        }
-        if (optionsView) {
-          optionsView.update(options);
+          astView.update(options);
         }
       }
     )

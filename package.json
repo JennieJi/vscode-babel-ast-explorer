@@ -29,9 +29,9 @@
     "commands": [
       {
         "command": "babelAstExplorer.start",
-        "title": "Open",
+        "title": "Show AST",
         "category": "Babel AST Explorer",
-        "icon": "$(triangle-right)"
+        "icon": "resources/icons/babel-logo-minimal.svg"
       },
       {
         "command": "babelAstExplorer.update",
@@ -49,11 +49,11 @@
           "when": "false"
         }
       ],
-      "view/title": [
+      "editor/title": [
         {
           "command": "babelAstExplorer.start",
-          "when": "view =~ /babelAstExplorer/",
-          "group": "navigation@2"
+          "group": "navigation@1",
+          "when": "editorLangId == 'typescript' || editorLangId == 'typescriptreact' || editorLangId == 'javascript' || editorLangId == 'javascriptreact'"
         }
       ]
     },
