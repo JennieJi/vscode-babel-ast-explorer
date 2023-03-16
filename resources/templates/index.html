@@ -192,8 +192,9 @@
               el => el.classList.remove(highlightClassName)
             );
             message.forEach(line => 
-              document.getElementsByClassName(`line-${line}`)[0].classList.add(highlightClassName)
+              document.getElementById(`line-${line}`)?.classList.add(highlightClassName)
             );
+            window.location.href = `#line-${Math.min(...message)}`;
             break;
           }
         }
