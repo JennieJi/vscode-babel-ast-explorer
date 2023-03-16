@@ -1,5 +1,6 @@
 import * as vscode from 'vscode';
 import { ParserOptions } from '@babel/parser';
+import debounce from 'lodash.debounce';
 import { resolveVersion } from './parserVersion';
 import renderAst from './renderAst';
 import simpleTemplate from './simpleTemplate';
@@ -11,19 +12,26 @@ export type ASTViewOptions = {
   sourceType?: ParserOptions['sourceType'];
 };
 
+enum ACTION {
+  SET_OPTIONS = 'SET_OPTIONS',
+  HIGHLIGHT = 'HIGHLIGHT',
+}
+
 class ASTView {
   private panel: vscode.WebviewPanel;
   private editor: vscode.TextEditor | undefined;
-  private codeVersion: number | undefined;
-  private updateTimer?: NodeJS.Timeout;
+  private debouncedUpdatePanel: (options?: ASTViewOptions) => void;
 
   private options = {
     sourceType: 'module',
   } as ASTViewOptions;
 
-  constructor(onDispose?: () => void, options?: ASTViewOptions) {
+  constructor(onDispose?: () => void, options: ASTViewOptions = {}) {
     this.editor = vscode.window.activeTextEditor;
-    const sourcePath = this.editor?.document.uri;
+    this.options = {
+      ...this.options,
+      ...options
+    };
     this.panel = vscode.window.createWebviewPanel(
       'babelAstExplorer',
       this.getTitle(),
@@ -32,29 +40,49 @@ class ASTView {
         enableScripts: true,
       }
     );
-    if (onDispose) {
-      this.panel.onDidDispose(onDispose);
-    }
-    this.update(options);
+    this.debouncedUpdatePanel = debounce(() => this.updatePanel(), 500);
+    this.updatePanel()
+    const textEditorWatcher = vscode.window.onDidChangeTextEditorSelection(() => this.highlightSelected());
+
+    this.panel.onDidDispose(() => {
+      textEditorWatcher.dispose();
+      if (onDispose) {
+        onDispose();
+      }
+    });
   }
 
   public update(options?: ASTViewOptions) {
     if (options) {
       this.options = { ...this.options, ...options };
     }
-    if (this.updateTimer) {
-      clearTimeout(this.updateTimer);
+    this.debouncedUpdatePanel();
+  }
+  public updateOptions(options: ASTViewOptions) {
+    if (
+      options.version !== this.options.version ||
+      options.sourceType !== this.options.sourceType ||
+      options.plugins?.toString() !== this.options.plugins?.toString()
+    ) {
+      return this.update(options);
     }
-    this.updatePanel();
-    this.updateTimer = setTimeout(() => {
-      if (this.getVersion() !== this.codeVersion) {
-        this.updatePanel();
-      }
-    }, 10000);
+    if (options.options?.toString() !== this.options.options?.toString()) {
+      this.options = {
+        ...this.options,
+        options: options.options
+      };
+      this.panel.webview.postMessage([ACTION.SET_OPTIONS, options.options]);
+    }
   }
 
-  public updateEditor() {
-    this.editor = vscode.window.activeTextEditor;
+  private highlightSelected() {
+    const lines = new Set<number>();
+    this.editor?.selections.forEach(selection => {
+      for (let n = selection.start.line; n <= selection.end.line; n++) {
+        lines.add(n + 1);
+      }
+    });
+    this.panel.webview.postMessage([ACTION.HIGHLIGHT, Array.from(lines)]);
   }
 
   private getTitle() {
@@ -66,27 +94,16 @@ class ASTView {
     }
   }
 
-  private getContent() {
-    return this.editor?.document.getText() || '';
-  }
-  private getVersion() {
-    return this.editor?.document.version;
-  }
-
   private async updatePanel() {
+    this.editor = vscode.window.activeTextEditor;
     this.panel.title = this.getTitle();
     this.panel.webview.html = 'Loading...';
-    this.codeVersion = this.getVersion();
     const content = await this.getWebviewContent();
-    if (content) {
-      this.panel.webview.html = content;
-    } else {
-      this.panel.webview.html = 'Error: empty content';
-    }
+    this.panel.webview.html = content ?? 'Error: empty content';
   }
 
   private async getWebviewContent() {
-    const raw = this.getContent();
+    const raw = this.editor?.document.getText() || '';
     const {
       version,
       sourceType,
@@ -100,9 +117,10 @@ class ASTView {
         sourceType,
         plugins,
       });
+
       return simpleTemplate('index.html', {
         ast: await renderAst(ast),
-        class: options.join(' '),
+        class: options.join(' ')
       });
     } catch (e) {
       return (e as Error).message;

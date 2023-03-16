@@ -36,6 +36,9 @@
       .type::after {
         content: ' ';
       }
+      .type-Program {
+        background-color: transparent !important;
+      }
       .key {
         color: var(--color-ast-secondary);
       }
@@ -139,6 +142,10 @@
       .no-empty .empty {
         display: none;
       }
+
+      .highlight {
+        background-color: lightyellow;
+      }
     </style>
   </header>
   <body>
@@ -159,9 +166,6 @@
           classList.add(classname);
         }
       }
-      window.option = function (value) {
-        toggleClass(document.getElementById('page'), value);
-      };
       window.onload = function () {
         var COLLAPSE_CLASS = 'collapse';
         document.getElementById('ast').addEventListener('click', function (e) {
@@ -174,6 +178,27 @@
           }
         });
       };
+      window.addEventListener('message', ({ data }) => {
+        if (!Array.isArray(data)) return;
+        const [action, message] = data;
+        switch(action) {
+          case 'SET_OPTION': 
+            document.getElementById('page').className = message.join(' ');
+            break;
+          case 'HIGHLIGHT': {
+            const highlightClassName = 'highlight';
+            Array.prototype.forEach.call(
+              document.getElementsByClassName(highlightClassName), 
+              el => el.classList.remove(highlightClassName)
+            );
+            message.forEach(line => 
+              document.getElementById(`line-${line}`)?.classList.add(highlightClassName)
+            );
+            window.location.href = `#line-${Math.min(...message)}`;
+            break;
+          }
+        }
+      });
     </script>
   </body>
 </html>
